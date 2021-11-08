@@ -152,7 +152,7 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <!--<li class="nav-item">
+              <li class="nav-item">
                 <a href="{{ route('tempsfonctionget') }}" class="nav-link">
                   <i class="nav-icon fas fa-chart-line"></i>
                   <p>Temps Fonction</p>  
@@ -164,7 +164,7 @@
                   <i class="nav-icon fas fa-chart-bar"></i>
                   <p>Activité par fonction</p>
                 </a>
-             </li>-->
+             </li>
 
              <li class="nav-item">
                 <a href="{{ route('indexbilan') }}" class="nav-link">
@@ -243,7 +243,7 @@
           @endcan
           
        
-        <!--  <li class="nav-item">
+          <!--<li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-chart-pie"></i>
               <p>

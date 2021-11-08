@@ -20,4 +20,9 @@ class Activite extends Model
      {
          return $this->hasMany('App\Models\Ficher');
      }
+
+     public function typeactivite()
+    {
+        return $this->belongsTo('App\Models\TypeActivite');
+    }
 }

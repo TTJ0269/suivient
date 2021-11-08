@@ -99,10 +99,10 @@ Route::get('/radar','ChartController@RadarChart')->name('radarChart');
 
 
 /*** Resultats ***/
-Route::get('/resultattempsfonctions','ResultatController@TempsFonctionGet')->name('tempsfonctionget'); 
-Route::post('/resultattempsfonctions','ResultatController@TempsFonction')->name('temps_fonction');
-Route::get('/nombreactivites','ResultatController@NombreActiviteParFonctionGet')->name('nombre_activiteget'); 
-Route::post('/nombreactivites','ResultatController@NombreActiviteParFonction')->name('nombre_activite'); 
+Route::get('/resultattempsfonctions','TempsActiviteController@TempsFonctionGet')->name('tempsfonctionget'); 
+Route::post('/resultattempsfonctions','TempsActiviteController@TempsFonction')->name('temps_fonction');
+Route::get('/nombreactivites','NombreActiviteController@NombreActiviteParFonctionGet')->name('nombre_activiteget'); 
+Route::post('/nombreactivites','NombreActiviteController@NombreActiviteParFonction')->name('nombre_activite'); 
 
 
 /** Visualisation **/

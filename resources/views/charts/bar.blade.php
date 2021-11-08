@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.appbarchart')
 
 @section('content')
   <!-- Content Header (Page header) -->
@@ -25,17 +25,29 @@
             <div class="row">
                 <div class="col-sm-12">
                 <div class="container px-4 mx-auto">      
-<div class="p-6 m-20 bg-white rounded shadow">
-    {!! $chart->container() !!}
-</div>
 
+                    <!-- BAR CHART -->
+                    <div class="card card-primary">
+                      <div class="card-header">
+                        <h3 class="card-title">Temps passé par fonction / Minute</h3>
 
-</div>
-
-<script src="{{ LarapexChart::cdn() }}"></script>
-
-
-{{ $chart->script() }}
+                        <div class="card-tools">
+                          <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="card-body">
+                        <div class="chart">
+                          <canvas id="barChart" style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
+                        </div>
+                        <p> F1: {{$tabvaleurfonction[0]}} </p>
+                        <p> F2: {{$tabvaleurfonction[1]}} </p>
+                        <p> F3: {{$tabvaleurfonction[2]}} </p>
+                        <p> F4: {{$tabvaleurfonction[3]}} </p>
+                        <p> F5: {{$tabvaleurfonction[4]}} </p>
+                      </div>
+                    </div>
                 </div>
             </div>
         </div>

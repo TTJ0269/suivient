@@ -11,7 +11,7 @@ use App\Models\Activite;
 
 class ChartController extends Controller
 {
-    public function PieChart()
+    /*public function PieChart()
     {
         $chart = (new LarapexChart)->pieChart()
         ->setTitle('Users')
@@ -19,19 +19,14 @@ class ChartController extends Controller
         ->addData([40, 50, 30, 20, 70])
         ->setLabels(['Player 7', 'Player 10', 'Player 9', 'Player 12', 'Player 15']);
         return view('charts.sample', compact('chart'));
-    }
+    }*/
 
     public function DonutChart()
     {
-        $chart = (new LarapexChart)->donutChart()
-        ->setTitle('Top 3 scorers of the team.')
-        ->setSubtitle('Season 2021.')
-        ->addData([20, 24, 30])
-        ->setLabels(['Player 7', 'Player 10', 'Player 9']);
-        return view ('charts.donut', compact('chart'));
+        return view ('charts.donut');
     }
 
-    public function RadialChart()
+   /* public function RadialChart()
     {
         $chart = (new LarapexChart)->radialChart()
         ->setTitle('Passing effectiveness.')
@@ -84,5 +79,5 @@ class ChartController extends Controller
         ->setXAxis(['Pass', 'Dribble', 'Shot', 'Stamina', 'Long shots', 'Tactical'])
         ->setMarkers(['#303F9F'], 7, 10);
         return view ('charts.radar', compact('chart'));
-    }
+    }*/
 }

@@ -212,5 +212,58 @@ for (let i = 0; i<menuLength; i++){
 </script>
 <!-- fin affichage-->
 
+<!-- charts affichage-->
+<script>
+  $(function () {
+    /* ChartJS
+     * -------
+     * Here we will create a few charts using ChartJS
+     */
+
+
+    //-------------
+    //- DONUT CHART -
+    //-------------
+    // Get context with jQuery - using jQuery's .get() method.
+    var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
+    var donutData        = {
+      labels: [
+        'F1',
+        'F2',
+        'F3',
+        'F4',
+        'F5',
+      ],
+      datasets: [
+        {
+          data: [
+            '{{$tabvaleurnombre[0]}}',
+            '{{$tabvaleurnombre[1]}}',
+            '{{$tabvaleurnombre[2]}}',
+            '{{$tabvaleurnombre[3]}}',
+            '{{$tabvaleurnombre[4]}}',
+            ],
+          backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc'],
+        }
+      ]
+    }
+    var donutOptions     = {
+      maintainAspectRatio : false,
+      responsive : true,
+    }
+    //Create pie or douhnut chart
+    // You can switch between pie and douhnut using the method below.
+    new Chart(donutChartCanvas, {
+      type: 'doughnut',
+      data: donutData,
+      options: donutOptions
+    })
+  })
+</script>
+
+<!-- charts affichage-->
+
+
+
 </body>
 </html>

@@ -212,5 +212,105 @@ for (let i = 0; i<menuLength; i++){
 </script>
 <!-- fin affichage-->
 
+<!-- charts affichage-->
+<script>
+    $(function () {
+      /* ChartJS
+       * -------
+       * Here we will create a few charts using ChartJS
+       */
+  
+  
+      //-------------
+      //- BAR CHART -
+      //-------------
+      var barChartCanvas = $('#barChart').get(0).getContext('2d')
+
+      var areaChartData = {
+      labels  : ['Temps passé par fonction'],
+      datasets: [
+        {
+          label               : 'F1',
+          backgroundColor     : 'rgba(60,141,188,0.9)',
+          borderColor         : 'rgba(60,141,188,0.8)',
+          pointRadius          : false,
+          pointColor          : '#3b8bba',
+          pointStrokeColor    : 'rgba(60,141,188,1)',
+          pointHighlightFill  : '#fff',
+          pointHighlightStroke: 'rgba(60,141,188,1)',
+          data                : ['{{$tabvaleurtemps[0]}}']
+        },
+        {
+          label               : 'F2',
+          backgroundColor     : 'rgba(245,105,84)',
+          borderColor         : 'rgba(245,105,84)',
+          pointRadius          : false,
+          pointColor          : '#f56954',
+          pointStrokeColor    : 'rgba(245,105,84)',
+          pointHighlightFill  : '#fff',
+          pointHighlightStroke: 'rgba(245,105,84)',
+          data                : ['{{$tabvaleurtemps[1]}}']
+        },
+        {
+          label               : 'F3',
+          backgroundColor     : 'rgba(60,188,171)',
+          borderColor         : 'rgba(60,188,171)',
+          pointRadius          : false,
+          pointColor          : '#3cbcab',
+          pointStrokeColor    : 'rgba(60,188,171)',
+          pointHighlightFill  : '#fff',
+          pointHighlightStroke: 'rgba(60,188,171)',
+          data                : ['{{$tabvaleurtemps[2]}}']
+        },
+        {
+          label               : 'F4',
+          backgroundColor     : 'rgba(241,194,50)', 	
+          borderColor         : 'rgba(241,194,50)',
+          pointRadius         :  false,
+          pointColor          : '#f1c232',
+          pointStrokeColor    : 'rgba(241,194,50)',
+          pointHighlightFill  : '#fff',
+          pointHighlightStroke: 'rgba(241,194,50)',
+          data                : ['{{$tabvaleurtemps[3]}}']
+        },
+        {
+          label               : 'F5',
+          backgroundColor     : 'rgba(106,168,79)',
+          borderColor         : 'rgba(106,168,79)',
+          pointRadius         :  false,
+          pointColor          : '#6AA84F',
+          pointStrokeColor    : 'rgba(106,168,79)',
+          pointHighlightFill  : '#fff',
+          pointHighlightStroke: 'rgba(106,168,79)',
+          data                : ['{{$tabvaleurtemps[4]}}']
+        },
+      ]
+    }
+    
+
+      var barChartData = $.extend(true, {}, areaChartData)
+      var temp0 = areaChartData.datasets[0]
+      var temp1 = areaChartData.datasets[1]
+      barChartData.datasets[0] = temp0
+      barChartData.datasets[1] = temp1
+  
+      var barChartOptions = {
+        responsive              : true,
+        maintainAspectRatio     : false,
+        datasetFill             : false
+      }
+  
+      new Chart(barChartCanvas, {
+        type: 'bar',
+        data: barChartData,
+        options: barChartOptions
+      })
+    })
+  </script>
+
+<!-- charts affichage-->
+
+
+
 </body>
 </html>

@@ -15,4 +15,9 @@ class TypeActivite extends Model
     {
         return $this->belongsTo('App\Models\Fonction');
     }
+
+    public function activite()
+     {
+         return $this->hasMany('App\Models\Activite');
+     }
 }
