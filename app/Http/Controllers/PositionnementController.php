@@ -22,7 +22,7 @@ class PositionnementController extends Controller
     {
           $this->middleware('auth');//->except(['index'])
     }
-    
+
     public function index()
     {
       try
@@ -39,7 +39,7 @@ class PositionnementController extends Controller
 
         if($type_utilisateur->libelletype == 'Administrateur' || $type_utilisateur->libelletype == 'Responsable du suivi')
         {
-  
+
             return view('positionnements.index', compact('semaines'));
         }
         else
@@ -99,43 +99,43 @@ class PositionnementController extends Controller
                   $tab_fonction_id[$f] = $fonction->id;
                   $tab_fonction_Libelle[$f] = $fonction->LibelleFonction;
 
-        
+
                   $tab_type_activite[$f] = DB::table('fonctions')
                   ->join('type_activites','fonctions.id','=','type_activites.fonction_id')
                   ->select('type_activites.id','type_activites.LibelleType')
                   ->where('fonctions.id','=',$tab_fonction_id[$f])
                   ->orderBy('fonctions.id')
                   ->get();
-                
+
                   $fonction_type_activites[$f] = collect([$tab_fonction_Libelle[$f],$tab_type_activite[$f]])->all();
                   $f++;
               }
 
               /** selection des activites classes par type d'activite **/
               $type_activites = TypeActivite::select('*')->orderBy('type_activites.id')->get();
-          
+
               $i = 0;
               foreach($type_activites as $type_activite)
               {
                   $tab_typeactivite_id[$i] = $type_activite->id;
                   $tab_typeactivite_Libelle[$i] = $type_activite->LibelleType;
 
-        
+
                   $tab_activite[$i] = DB::table('type_activites')
                   ->join('activites','type_activites.id','=','activites.type_activite_id')
                   ->select('activites.id','activites.LibelleActivite')
                   ->where('type_activites.id','=',$tab_typeactivite_id[$i])
                   ->orderBy('type_activites.id')
                   ->get();
-                
+
                   $collections[$i] = collect([$tab_typeactivite_id[$i],$tab_typeactivite_Libelle[$i],$tab_activite[$i]])->all();
-        
+
                   $i++;
-              } 
+              }
 
               return view('positionnements.create',compact('collections','fonction_type_activites','semaine_livret'));
         }
-  
+
         }
         catch(\Exception $exception)
         {
@@ -163,7 +163,7 @@ class PositionnementController extends Controller
           $LibelleRapport = 'Rapport '.$date.' _'.$users_tel.' '.$ifad_id.'_';
           $Livret_positionnement = 'Livret de positionnement '.$date.' _'.$users_tel.' '.$ifad_id.'_';
 
-        
+
           /** recuperation de l'id du rapport qui vient d'etre enregistre  **/
           $recuperation_id = DB::table('rapports')
           ->where('rapports.LibelleRapport','=',$LibelleRapport)
@@ -179,7 +179,7 @@ class PositionnementController extends Controller
           ->where('ifad_moniteurs.user_id','=',$users_id)
           ->select('ifad_moniteurs.id')->get()->last();
 
-        
+
          if($recuperation_id == null)
          {
             /** enregistrement des donnees dans Rapport et recuperation de id **/
@@ -213,6 +213,11 @@ class PositionnementController extends Controller
              foreach($type_values as $type_value)
              {
                $temps[$t]= request('TempsPost_'.$type_value->id);
+
+               if($temps[$t] == null)
+               {
+                   $temps[$t] = 0;
+               }
                  /** enregistrement des temps_type **/
                $temps_type = TempsType::create([
                  'TempsPost'=> $temps[$t],
@@ -263,6 +268,11 @@ class PositionnementController extends Controller
             foreach($type_values as $type_value)
             {
               $temps[$t]= request('TempsPost_'.$type_value->id);
+
+              if($temps[$t] == null)
+               {
+                   $temps[$t] = 0;
+               }
                 /** enregistrement des temps_type **/
               $temps_type = TempsType::create([
                 'TempsPost'=> $temps[$t],
@@ -325,7 +335,7 @@ class PositionnementController extends Controller
             'attribute' =>  request('ValeurPost'),
             'action'=> 'modification',
           ]);
-    
+
           return redirect('livret_positionnements/' . $livret_id)->with('message', "Livret de positionnement mise à jour");
         }
         catch(\Exception $exception)
@@ -386,7 +396,7 @@ class PositionnementController extends Controller
 
      }
 
-    private function get_lundi_vendredi_from_week($week,$year,$format="d/m/Y") 
+    private function get_lundi_vendredi_from_week($week,$year,$format="d/m/Y")
     {
 
       $firstDayInYear=date("N",mktime(0,0,0,1,1,$year));
@@ -397,9 +407,9 @@ class PositionnementController extends Controller
       if ($week>1) $weekInSeconds=($week-1)*604800; else $weekInSeconds=0;
       $timestamp=mktime(0,0,0,1,1,$year)+$weekInSeconds+$shift;
       $timestamp_vendredi=mktime(0,0,0,1,5,$year)+$weekInSeconds+$shift;
-      
+
       return date($format,$timestamp)." - " .date($format,$timestamp_vendredi);
-      
+
     }
 
 }

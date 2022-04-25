@@ -34,20 +34,20 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-12">
-                    <div class="card-body"> 
+                    <div class="card-body">
                            <a href="/fichers/download/{{$ficher->urlficher}}" class="btn btn-primary my-3"> <i class="fas fa-download"></i><span> Télécharger </span> </a>
                           <!--  <a href="{{ route('fichers.edit', ['ficher' => $ficher->id]) }}" class="btn btn-primary my-3">Modifier</a> -->
                           @can('autorisationMoniteur','App\Models\User')
-                            <form action="{{ route('fichers.destroy', ['ficher' => $ficher->id]) }}" method="POST" style="display: inline;">
+                            <form action="{{ route('fichers.destroy', ['ficher' => $ficher->id]) }}" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer?')">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i><span> Supprimer </span></button>
-                            </form>  
+                            </form>
                           @endcan
-                            <hr> 
+                            <hr>
                             <p><strong>Libelle :</strong> {{$ficher->libelleficher}}</p>
                             @if($ficher->urlficher)
-                            <iframe src="{{ asset('storage/fichier/' .$ficher->urlficher) }}" frameborder="0" style="width: 600px; height: 400px;"></iframe>    
+                            <iframe src="{{ asset('storage/fichier/' .$ficher->urlficher) }}" frameborder="0" style="width: 600px; height: 400px;"></iframe>
                             @endif
                             <hr>
                     </div>

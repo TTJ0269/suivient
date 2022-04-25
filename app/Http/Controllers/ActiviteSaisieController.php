@@ -18,7 +18,7 @@ class ActiviteSaisieController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth'); 
+        $this->middleware('auth');
     }
              /**
        * Display a listing of the resource.
@@ -87,15 +87,15 @@ class ActiviteSaisieController extends Controller
       {
           return redirect('erreur')->with('messageerreur',$exception->getMessage());
       }
-  
+
      }
-  
+
        /**
       * Show the form for creating a new resource.
       *
       * @return \Illuminate\Http\Response
       */
-  
+
      public function create($rapport_id)
      {
        try
@@ -109,7 +109,7 @@ class ActiviteSaisieController extends Controller
           $activite_saisy = new Activite();
           $fonctions = Fonction::all();
           $rapports = Rapport::select('*')->where('id','=',$rapport_id)->get();
-    
+
           return view('activite_saisies.create',compact('activite_saisy','fonctions','rapports'));
         }
 
@@ -119,7 +119,7 @@ class ActiviteSaisieController extends Controller
           return redirect('erreur')->with('messageerreur',$exception->getMessage());
        }
      }
-    
+
      public function create_rapport()
      {
        try
@@ -130,6 +130,10 @@ class ActiviteSaisieController extends Controller
 
 
         /** Recuperation du dernier  en cours **/
+        $ifad_moniteur_id = DB::table('ifad_moniteurs')
+        ->where('ifad_moniteurs.user_id','=',$users_id)
+        ->select('ifad_moniteurs.id')->get()->last()->id;
+
         $ifad_id = DB::table('ifad_moniteurs')
         ->where('ifad_moniteurs.user_id','=',$users_id)
         ->select('ifad_moniteurs.ifad_id')->get()->last()->ifad_id;
@@ -153,13 +157,13 @@ class ActiviteSaisieController extends Controller
            /** enregistrement des donnees dans Rapport et recuperation de id **/
             $rapport = Rapport::insertGetId([
             'LibelleRapport'=> $LibelleRapport,
-            'ifad_moniteur_id'=> $ifad_id,
+            'ifad_moniteur_id'=> $ifad_moniteur_id,
             'etat'=> 0,'etatsup'=> 0]);
 
             $activite_saisy = new Activite();
             $fonctions = Fonction::all();
             $rapports = Rapport::select('*')->where('rapports.id','=',$rapport)->get();
-    
+
           return view('activite_saisies.create',compact('activite_saisy','fonctions','rapports'));
         }
 
@@ -169,16 +173,16 @@ class ActiviteSaisieController extends Controller
           return redirect('erreur')->with('messageerreur',$exception->getMessage());
        }
      }
-  
+
        /**
       * Store a newly created resource in storage.
       *
       * @param  \Illuminate\Http\Request  $request
       * @return \Illuminate\Http\Response
       */
-  
+
      public function store(Request  $request)
-     {  
+     {
        $this->validator();
 
        try
@@ -201,14 +205,14 @@ class ActiviteSaisieController extends Controller
           if($request->file('urlficher') && $ficher =! null)
           {
               $fichers = new Ficher;
-          
+
               $fichers->libelleficher = request('libelleficher');
               $fichers->activite_saisie_id = $activite_saisy;
 
               $file=$request->file('urlficher');
               $filename=time().'.'.$file->getClientOriginalExtension();
               $request->urlficher->move('storage/fichier/', $filename);
-      
+
               $fichers->urlficher=$filename;
 
               $fichers->save();
@@ -228,7 +232,7 @@ class ActiviteSaisieController extends Controller
           return redirect('erreur')->with('messageerreur',$exception->getMessage());
       }
      }
-  
+
      // return redirect('rapports')->with('message', 'Rapport bien ajoutée.');
       /**
       * Display the specified resource.
@@ -236,7 +240,7 @@ class ActiviteSaisieController extends Controller
       * @param  int  $id
       * @return \Illuminate\Http\Response
       */
-  
+
      public function show(ActiviteSaisie $activite_saisy)
      {
        try
@@ -259,14 +263,14 @@ class ActiviteSaisieController extends Controller
             return redirect('erreur')->with('messageerreur',$exception->getMessage());
         }
      }
-  
+
     /**
       * Show the form for editing the specified resource.
       *
       * @param  int  $id
       * @return \Illuminate\Http\Response
       */
-  
+
      public function edit(ActiviteSaisie $activite_saisy)
      {
        try
@@ -300,7 +304,7 @@ class ActiviteSaisieController extends Controller
           return redirect('erreur')->with('messageerreur',$exception->getMessage());
       }
      }
-  
+
         /**
       * Update the specified resource in storage.
       *
@@ -308,7 +312,7 @@ class ActiviteSaisieController extends Controller
       * @param  int  $id
       * @return \Illuminate\Http\Response
       */
-  
+
      public function update(ActiviteSaisie $activite_saisy)
      {
       try
@@ -341,14 +345,14 @@ class ActiviteSaisieController extends Controller
         }
 
      }
-  
+
       /**
       * Remove the specified resource from storage.
       *
       * @param  int  $id
       * @return \Illuminate\Http\Response
       */
-  
+
      public function destroy(ActiviteSaisie $activite_saisy)
      {
        try
@@ -375,7 +379,7 @@ class ActiviteSaisieController extends Controller
                 'attribute' => $activite_saisy->TitreActiviteSaisie,
                 'action'=> 'suppression',
             ]);
-      
+
             return redirect('activite_saisies');
           }
       }
@@ -393,7 +397,7 @@ class ActiviteSaisieController extends Controller
             'DescriptionActiviteSaisie'=> 'required|min:2',
             'fonction_id' =>'required|integer',
             'rapport_id' =>'required|integer',
-         ]); 
+         ]);
      }
 
      private function semaine()
@@ -447,7 +451,7 @@ class ActiviteSaisieController extends Controller
 
      }
 
-    private function get_lundi_vendredi_from_week($week,$year,$format="d/m/Y") 
+    private function get_lundi_vendredi_from_week($week,$year,$format="d/m/Y")
     {
 
       $firstDayInYear=date("N",mktime(0,0,0,1,1,$year));
@@ -458,9 +462,9 @@ class ActiviteSaisieController extends Controller
       if ($week>1) $weekInSeconds=($week-1)*604800; else $weekInSeconds=0;
       $timestamp=mktime(0,0,0,1,1,$year)+$weekInSeconds+$shift;
       $timestamp_vendredi=mktime(0,0,0,1,5,$year)+$weekInSeconds+$shift;
-      
+
       return date($format,$timestamp)." - " .date($format,$timestamp_vendredi);
-      
+
     }
 
 }

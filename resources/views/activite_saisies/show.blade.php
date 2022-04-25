@@ -34,19 +34,19 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-12">
-                    <div class="card-body">  
+                    <div class="card-body">
                             <a href="{{ route('activite_saisies.edit', ['activite_saisy' => $activite_saisy->id]) }}" class="btn btn-primary my-3"><i class="fas fa-edit"></i><span> Modifier </span></a>
-                            <form action="{{ route('activite_saisies.destroy', ['activite_saisy' => $activite_saisy->id]) }}" method="POST" style="display: inline;">
+                            <form action="{{ route('activite_saisies.destroy', ['activite_saisy' => $activite_saisy->id]) }}" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer?')">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i><span> Supprimer </span></button>
-                            </form>  
+                            </form>
                             <hr>
                             <p><strong>Dèscription de l'activité :</strong> {{$activite_saisy->DescriptionActiviteSaisie}}</p>
                               @foreach($fichers as $ficher)
                               <p><strong>Libelle du fichier :</strong> {{$ficher->libelleficher}}</p>
                                 @if($ficher->urlficher)
-                                <iframe src="{{ asset('storage/fichier/' .$ficher->urlficher) }}" frameborder="0" style="width: 600px; height: 400px;"></iframe>    
+                                <iframe src="{{ asset('storage/fichier/' .$ficher->urlficher) }}" frameborder="0" style="width: 600px; height: 400px;"></iframe>
                                 @endif
                                 <hr>
                               @endforeach

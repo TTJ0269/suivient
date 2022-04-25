@@ -104,7 +104,7 @@
                                         <div class="row">
                                             <div class="col-12 col-sm-8">
                                               <div class="form-group">
-                                                <input type="number" name="temps_type_{{ $collection[3]}}" value="{{ $collection[2]}}" />
+                                                <input type="number" name="temps_type_{{ $collection[3]}}" value="{{ $collection[2]}}" autofocus  required/>
                                               </div>
                                             </div>
 

@@ -29,7 +29,7 @@
             </div>
 
             <div class="col-12 col-sm-4">
-              <div class="form-group"> 
+              <div class="form-group">
                   <div class="form-group clearfix">
                     <div class="icheck-danger">
                     <input type="radio" id="radioDangerGrille"  name="ValeurPost_Grille1" checked >
@@ -86,7 +86,7 @@
                           <th scope="row"> <a href="#"> {{++$key}} </a> </th>
                           <th scope="row"> <a href="#"> {{$collection[1]}} </a></th>
                           <th scope="row"> <a href="#"> </a></th>
-                          <tr>  
+                          <tr>
                           <th>
                             <th scope="row">
 
@@ -98,8 +98,8 @@
                               <tbody>
                                   @foreach($collection[2] as $activite)
                                   <tr>
-                                  <th scope="row"> {{$activite->LibelleActivite}} </th> 
-                                  <th scope="row">  
+                                  <th scope="row"> {{$activite->LibelleActivite}} </th>
+                                  <th scope="row">
                                     <div class="form-group clearfix">
                                         <div class="icheck-danger d-inline">
                                         <input type="radio" id="radioDanger{{$activite->id}}" value="0" name="ValeurPost_{{$activite->id}}" checked>
@@ -128,13 +128,13 @@
                               </tbody>
                               </table>
                               </th>
-                              <th scope="row"> 
-                              <div class="form-group"> 
-                                  <input type="number" class="form-control @error('TempsPost_{{$collection[0]}}') is-invalid @enderror" name="TempsPost_{{$collection[0]}}" autofocus  required/>
+                              <th scope="row">
+                              <div class="form-group">
+                                  <input type="number" class="form-control @error('TempsPost_{{$collection[0]}}') is-invalid @enderror" name="TempsPost_{{$collection[0]}}"/>
                                   @error('TempsPost_{{$collection[0]}}')
                                       <div class="invalid-feedback">
                                       <!--{{ $errors->first('TempsPost_')}}-->
-                                      </div>   
+                                      </div>
                                   @enderror
                               </div>
                               </th>
@@ -174,7 +174,7 @@
                   </div>
                   <!-- /.tab-pane -->
                 </div>
-                
+
                 <!-- /.tab-content -->
               </div><!-- /.card-body -->
             </div>
