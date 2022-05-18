@@ -1,5 +1,5 @@
  @extends('layouts.app')
- 
+
  @section('content')
   <!-- Content Header (Page header) -->
   <div class="content-header">
@@ -30,11 +30,10 @@
             </button>
         </div>
     </div>
-     <div class="card-body"> 
-     <div class="container-fluid"> 
+     <div class="card-body">
+     <div class="container-fluid">
         <form action="{{ route('placement_create_user') }}"  method="POST" enctype="multipart/form-data">
         @csrf
-              <div class="row">
                   <div class="col-sm-12">
                     <div class="content">
                           <div class="form-group row">
@@ -51,20 +50,40 @@
                                             @endforeach
                                         </select>
                                   </div>
-                              </div>
-                          </div>
-                      </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-              </div>
+
+                        <div class="col-sm-12">
+                            <div class="content">
+                                    <div class="form-group row">
+                                        <label for="name" class="col-sm-2 col-form-label">Date à évaluation</label>
+                                            <div class="col-sm-10">
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                                </div>
+                                                    <input type="date" class="form-control  @error('date') is-invalid @enderror" name="date" id="date">
+                                                    @error('date')
+                                                    <div class="invalid-feedback">
+                                                        {{ $errors->first('date')}}
+                                                    </div>
+                                                    @enderror
+                                            </div>
+                                           </div>
+                                     </div>
+                                </div>
+                            </div>
 
             <div class="text-center">
                <button class="btn btn-primary my-3"> Suivant <i class="fas fa-angle-right"></i></button>
             </div>
 
         </form>
-    </div> 
     </div>
-</div>                      
+    </div>
+</div>
 
     <!-- cadre general -->
 <div class="card card-secondary direct-chat direct-chat-secondary">
@@ -75,7 +94,7 @@
     </div>
   </div>
   <!-- /fin cadre -->
-    
+
     <!-- Main content -->
     <div class="content">
         <div class="container-fluid">

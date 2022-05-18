@@ -34,7 +34,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-12">
-                    <div class="card-body">  
+                    <div class="card-body">
                          <table id="example1" class="table table-bordered table-striped">
                           <hr>
                         <thead>
@@ -50,13 +50,14 @@
                               <th scope="row"> {{++$key}} </th>
                               <th scope="row"> {{$collection[0]}} </th>
                               <th scope="row"> {{$collection[1]}} </th>
-                              <th scope="row"> {{$collection[2]}} </th>
+                              <th scope="row"> {{$collection[2]}}  <a href="{{ route('placements.edit', ['placement' => $collection[3]]) }}"> <i class="fas fa-pen"></i><span></span> </a></th>
                               </tr>
                               @endforeach
                             </tbody>
                         </table>
                     </div>
-                </div>
+
+     </div>
             </div>
         </div>
     </div>

@@ -19,7 +19,7 @@
     <!-- cadre general -->
       <div class="card card-secondary direct-chat direct-chat-secondary">
     <div class="card-header">
-      <h3 class="card-title">Evaluation du {{ $date }}</h3>
+      <h3 class="card-title">Evaluation</h3>
       <div class="card-tools">
         <span data-toggle="tooltip" title="user" class="nav-icon fas fa-book-open"></span>
       </div>
@@ -63,47 +63,39 @@
                     </div>
                     </div>
                 </div>
-                       <input type="number" hidden  name="user_id" value="{{$id_user}}" >
-                       <input type="text" hidden  name="date" value="{{$date}}" >
+
+                <input type="number" hidden  name="placement" value="{{$placement->id}}" >
 
                      <table id="exa" class="table table-bordered table-striped">
                       <thead>
-                          <th scope="col">Numéro</th>
                           <th scope="col">Type évaluation</th>
                           <th scope="col">Placement_évaluation</th>
-                          <th scope="col">Evaluation</th>
                       </thead>
 
                           <tbody>
-                          @foreach($collections as $key=>$collection)
+                          @foreach($type_evaluations as $key=>$type_evaluation)
                           <tr>
-                          <th scope="row"> <a href="#"> {{++$key}} </a> </th>
-                          <th scope="row"> <a href="#"> {{$collection[1]}} </a></th>
+                          <th scope="row"> <a href="#"> {{$type_evaluation->LibelleEvaluation}} </a></th>
                           <th>
                                 <div class="form-group clearfix">
                                         <div class="icheck-danger d-inline">
-                                        <input type="radio" id="radioDanger{{$collection[0]}}" value="1" name="ValeurPlace_{{$collection[0]}}" checked>
-                                        <label for="radioDanger{{$collection[0]}}"></label>
+                                        <input type="radio" id="radioDanger" value="1" name="ValeurPlace" checked>
+                                        <label for="radioDanger"></label>
                                         </div>
                                         <div class="icheck-orange d-inline">
-                                        <input type="radio" id="radioOrange{{$collection[0]}}" value="2" name="ValeurPlace_{{$collection[0]}}">
-                                        <label for="radioOrange{{$collection[0]}}"></label>
+                                        <input type="radio" id="radioOrange" value="2" name="ValeurPlace">
+                                        <label for="radioOrange"></label>
                                         </div>
                                         <div class="icheck-primary d-inline">
-                                        <input type="radio" id="radioPrimary{{$collection[0]}}" value="3" name="ValeurPlace_{{$collection[0]}}">
-                                        <label for="radioPrimary{{$collection[0]}}"></label>
+                                        <input type="radio" id="radioPrimary" value="3" name="ValeurPlace">
+                                        <label for="radioPrimary"></label>
                                         </div>
                                         <div class="icheck-success d-inline">
-                                        <input type="radio" id="radioSuccess{{$collection[0]}}" value="4" name="ValeurPlace_{{$collection[0]}}">
-                                        <label for="radioSuccess{{$collection[0]}}"></label>
+                                        <input type="radio" id="radioSuccess" value="4" name="ValeurPlace">
+                                        <label for="radioSuccess"></label>
                                         </div>
                                 </div>
                           </th>
-                          <th scope="row">
-                                  @foreach($collection[2] as $key=>$evaluation)
-                                  <h6>({{$evaluation->valeur}}) {{$evaluation->LibelleEval}} </h6>
-                                  @endforeach
-                            </th>
                           @endforeach
                           </tr>
                           </tbody>

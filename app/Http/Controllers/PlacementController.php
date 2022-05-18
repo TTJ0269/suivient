@@ -77,10 +77,15 @@ class PlacementController extends Controller
         try
         {
               $id_user = request('user_id');
+              $date_evaluation = request('date');
 
               if($id_user == null)
               {
                 return back()->with('messagealert', "Administrateur ENT non sélectionné.");
+              }
+              elseif(Date::make($date_evaluation) > now())
+              {
+                return back()->with('messagealert', "La date sélectionnée est supérieur à la date d'aujourd'hui.");
               }
               else
               {
@@ -88,14 +93,14 @@ class PlacementController extends Controller
 
                 /** recuperation de ifad_id selon l'utilisateur **/
                 $user_id = (Auth::user()->id);
-                $date = now()->format('d/m/Y');
-                $date_now = now()->format('Y-m-d');
-  
+                $date =  $date_evaluation;//now()->format('d/m/Y');
+                //$date_now = now()->format('Y-m-d');
+
                 $Responsable_ifad_id = DB::table('ifad_moniteurs')
                 ->where('ifad_moniteurs.user_id','=',$user_id)
                 ->select('ifad_moniteurs.ifad_id')
                 ->get()->last()->ifad_id;
-  
+
                 $AdministrateurENT_ifad_id = DB::table('ifad_moniteurs')
                 ->where('ifad_moniteurs.user_id','=',$id_user)
                 ->select('ifad_moniteurs.ifad_id')
@@ -111,9 +116,9 @@ class PlacementController extends Controller
                 {
                   return back()->with('messagealert', "L'Administrateur ENT sélectionné n'est pas dans le même IFAD que vous.");
                 }
-                elseif(DB::table('placements')->where('DateEnregistrement','=',$date_now)->where('ifad_moniteur_id','=',$ifad_moniteur_id)->exists())
+                elseif(DB::table('placements')->where('DateEnregistrement','=',$date)->where('ifad_moniteur_id','=',$ifad_moniteur_id)->exists())
                 {
-                  return back()->with('messagealert', "L'Administrateur ENT sélectionné a déjà été évalué aujourd'hui");
+                  return back()->with('messagealert', "L'Administrateur ENT sélectionné a déjà été évalué à cette date");
                 }
                 else
                 {
@@ -126,23 +131,23 @@ class PlacementController extends Controller
                       $tab_type_evaluation_id[$t] = $type_evaluation->id;
                       $tab_type_evaluation_Libelle[$t] = $type_evaluation->LibelleEvaluation;
 
-            
+
                       $tab_type_evaluation[$t] = DB::table('type_evaluations')
                       ->join('evaluations','type_evaluations.id','=','evaluations.type_evaluation_id')
                       ->select('evaluations.id','evaluations.LibelleEval','evaluations.valeur')
                       ->where('type_evaluations.id','=',$tab_type_evaluation_id[$t])
                       ->orderBy('evaluations.valeur')
                       ->get();
-                    
+
                       $collections[$t] = collect([$tab_type_evaluation_id[$t],$tab_type_evaluation_Libelle[$t],$tab_type_evaluation[$t]])->all();
                       $t++;
                   }
 
                   return view('placements.create',compact('collections','date','id_user'));
                 }
-  
+
               }
-  
+
         }
         catch(\Exception $exception)
         {
@@ -157,6 +162,7 @@ class PlacementController extends Controller
 
           /** Recuperation de l'utilisateur en cours **/
           $users_id = request('user_id');
+          $date = request('date');
 
            /** recuperation le dernier id de ifad_moniteur par rapport a l'utilisateur **/
            $ifad_moniteur_id = DB::table('ifad_moniteurs')
@@ -175,7 +181,7 @@ class PlacementController extends Controller
               $placements = Placement::create([
                 'ValeurPlace'=> $value[$i],
                 'ifad_moniteur_id'=> $ifad_moniteur_id,
-                'DateEnregistrement'=> now(),
+                'DateEnregistrement'=> $date, //now(),
                 'type_evaluation_id'=> $type_evaluations_value->id,]);
                 $i++;
             }
@@ -206,10 +212,10 @@ class PlacementController extends Controller
             ->join('ifad_moniteurs','users.id','=','ifad_moniteurs.user_id')
             ->join('placements','ifad_moniteurs.id','=','placements.ifad_moniteur_id')
             ->join('type_evaluations','type_evaluations.id','=','placements.type_evaluation_id')
-            ->select('type_evaluations.id','placements.ValeurPlace','type_evaluations.LibelleEvaluation')
+            ->select('type_evaluations.id','placements.id as placement_id','placements.ValeurPlace','type_evaluations.LibelleEvaluation')
             ->where('placements.DateEnregistrement','=',$placement_date)
             ->where('ifad_moniteurs.id','=',$placement_ifad_moniteur)
-            ->groupBy('type_evaluations.LibelleEvaluation','placements.ValeurPlace','type_evaluations.id')
+            ->groupBy('type_evaluations.LibelleEvaluation','placements.ValeurPlace','type_evaluations.id','placement_id')
             ->distinct('type_evaluations.LibelleEvaluation')
             ->orderBy('type_evaluations.id')
             ->get();
@@ -220,6 +226,7 @@ class PlacementController extends Controller
               $LibelleEvaluation[$i] = $placement->LibelleEvaluation;
               $type_evaluation_id[$i] = $placement->id;
               $place_valeur[$i] = $placement->ValeurPlace;
+              $place_id[$i] = $placement->placement_id;
 
               $evaluations[$i] = DB::table('type_evaluations')
               ->join('evaluations','type_evaluations.id','=','evaluations.type_evaluation_id')
@@ -227,7 +234,7 @@ class PlacementController extends Controller
               ->where('evaluations.valeur','=',$place_valeur[$i])
               ->select('evaluations.*')->first()->LibelleEval;
 
-               $collections[$i] = collect([$LibelleEvaluation[$i],$evaluations[$i],$place_valeur[$i]])->all();
+               $collections[$i] = collect([$LibelleEvaluation[$i],$evaluations[$i],$place_valeur[$i],$place_id[$i]])->all();
 
                $i++;
             }
@@ -239,5 +246,35 @@ class PlacementController extends Controller
        {
            return redirect('erreur')->with('messageerreur',$exception->getMessage());
        }
+     }
+
+     public function edit(Placement $placement)
+     {
+        try
+        {
+            $type_evaluations = DB::table('type_evaluations')->where('id','=',$placement->type_evaluation_id)->select('*')->get();
+
+            return view('placements.edit', compact('type_evaluations','placement'));
+        }
+        catch(\Exception $exception)
+        {
+            return redirect('erreur')->with('messageerreur',$exception->getMessage());
+        }
+     }
+
+     public function update(Placement $placement)
+     {
+         try
+         {
+            $placement->update([
+                'ValeurPlace'=> request('ValeurPlace'),
+                ]);
+
+            return redirect('placements')->with('message','Mise à jour éffectuée avec succès');
+         }
+        catch(\Exception $exception)
+        {
+            return redirect('erreur')->with('messageerreur',$exception->getMessage());
+        }
      }
 }

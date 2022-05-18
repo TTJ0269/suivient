@@ -47,7 +47,7 @@ class ActiviteSaisieController extends Controller
             ->join('rapports','ifad_moniteurs.id','=','rapports.ifad_moniteur_id')
             ->join('activite_saisies','rapports.id','=','activite_saisies.rapport_id')
             ->join('fonctions','fonctions.id','=','activite_saisies.fonction_id')
-            ->select('activite_saisies.*','rapports.LibelleRapport','fonctions.LibelleFonction')
+            ->select('activite_saisies.*','rapports.LibelleRapport','rapports.id as id_rapport','fonctions.LibelleFonction')
             ->orderBy('activite_saisies.id','DESC')
             ->get();
 
@@ -73,7 +73,7 @@ class ActiviteSaisieController extends Controller
               ->join('rapports','ifad_moniteurs.id','=','rapports.ifad_moniteur_id')
               ->join('activite_saisies','rapports.id','=','activite_saisies.rapport_id')
               ->join('fonctions','fonctions.id','=','activite_saisies.fonction_id')
-              ->select('activite_saisies.*','rapports.LibelleRapport','fonctions.LibelleFonction')
+              ->select('activite_saisies.*','rapports.LibelleRapport','rapports.id as id_rapport','fonctions.LibelleFonction')
               ->where('ifad_moniteurs.user_id','=',$user_id)
               ->where('ifad_moniteurs.ifad_id','=',$ifad_id)
               ->orderBy('activite_saisies.id','DESC')
@@ -223,7 +223,7 @@ class ActiviteSaisieController extends Controller
           }
           /** historiques des actions sur le systeme **/
             $historique = Historique::create(['user'=> $huser,'table'=> 'ActiviteSaisie',
-            'attribute' => request('DescriptionActiviteSaisie'),'action'=> 'ajout']);
+            'attribute' => request('TitreActiviteSaisie'),'action'=> 'ajout']);
 
         return redirect('activitesaisie_rapport/' .$rapport_id)->with('message', 'Informations bien enregistrées.');
       }
@@ -388,6 +388,21 @@ class ActiviteSaisieController extends Controller
           return redirect('erreur')->with('messageerreur',$exception->getMessage());
       }
 
+     }
+
+     public function activite_rapport(Rapport $id_rapport)
+     {
+         /** recuperation des activite_saisies associees au rapport selectionnne classées par fonction **/
+         $fonctions = DB::table('rapports')
+         ->join('activite_saisies','rapports.id','=','activite_saisies.rapport_id')
+         ->join('fonctions','fonctions.id','=','activite_saisies.fonction_id')
+         ->where('rapports.id','=',$id_rapport->id)
+         ->select('activite_saisies.*','fonctions.LibelleFonction')
+         ->orderBy('fonctions.id')
+         ->get();
+
+           return view('activite_saisies.activite_rapport',compact('fonctions'));
+        // dd($fonction_activites);
      }
 
      private  function validator()

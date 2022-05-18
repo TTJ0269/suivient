@@ -14,13 +14,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('auth.login'); //c'est le welcome qui doit etre là normalement 
+    return view('auth.login'); //c'est le welcome qui doit etre là normalement
 });
 
 Route::get('/dashboard', 'AccueilController@dash')->middleware(['auth'])->name('dashboard');
 
 Auth::routes();
-//require __DIR__.'/auth.php';      
+//require __DIR__.'/auth.php';
 
 /*** changement de mot de passe a la connection ***/
 Route::get('/passwordchangement', 'NewPasswordController@PasswordChangement')->middleware(['auth'])->name('passwordchangement');
@@ -68,7 +68,7 @@ Route::resource('/evaluations', 'EvaluationController');
 /*** routes generales pour ficher ***/
 Route::resource('/fichers', 'FicherController');
 Route::get('/ficher_activite_saisies/{activite_saisy}', 'FicherController@create')->name('fichier');
-Route::get('/fichers/download/{file}','FicherController@Telecharger'); 
+Route::get('/fichers/download/{file}','FicherController@Telecharger');
 
 /*** routes generales pour commentaire ***/
 Route::resource('/commentaires', 'CommentaireController');
@@ -94,6 +94,7 @@ Route::resource('/activite_saisies', 'ActiviteSaisieController');
 Route::get('/activitesaisie_rapport/{rapport_id}', 'ActiviteSaisieController@create')->name('activitesaisie');
 Route::get('/activitesaisie_semaine_rapport', 'ActiviteSaisieController@index')->name('activite_saisies_index_rapport');
 Route::post('/activitesaisie_semaine_rapport', 'ActiviteSaisieController@create_rapport')->name('activite_saisies_create_rapport');
+Route::get('/activite_rapport/{id_rapport}', 'ActiviteSaisieController@activite_rapport')->name('activite_rapport');
 
 /*** routes generales pour le profil de l'utilisateur ***/
 Route::get('/profil', 'ProfilController@show')->name('profilshow');
@@ -103,8 +104,8 @@ Route::post('/profilphoto', 'ProfilController@changephoto')->name('profilphotoch
 
 
 /** Visualisation **/
-Route::get('/rapportsvalider','ResultatController@RapportValider')->name('rapport_valider'); 
-Route::get('/rapportsnonvalider','ResultatController@RapportnonValider')->name('rapport_non_valider'); 
+Route::get('/rapportsvalider','ResultatController@RapportValider')->name('rapport_valider');
+Route::get('/rapportsnonvalider','ResultatController@RapportnonValider')->name('rapport_non_valider');
 
 
 /** Statistiques **/
@@ -121,14 +122,14 @@ Route::post('/statistiques_mois_general', 'StatistiqueMoisController@Statistique
 Route::get('/historique','HistoriqueController@index')->name('historique_index');
 
 /** Erreur **/
-Route::get('/erreur','AccueilController@Erreur')->name('page_erreur'); 
+Route::get('/erreur','AccueilController@Erreur')->name('page_erreur');
 
 /** page test **/
 Route::get('/template','AccueilController@template')->name('template');
 //Route::get('/insertion', 'FirstEnregistrementController@insertion')->name('insertion');
 
 /** route de notification **/
-Route::get('/shownotification/{commentaire}/{notification}','CommentaireController@ShowNotification')->name('notification_commentaire'); 
+Route::get('/shownotification/{commentaire}/{notification}','CommentaireController@ShowNotification')->name('notification_commentaire');
 
 /*** routes generales pour recherche ***/
 /*Route::get('/rechercheficher', 'RechercheController@Rechercheficher')->name('rechercheficher');

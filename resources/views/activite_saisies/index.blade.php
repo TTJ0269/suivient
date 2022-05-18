@@ -21,7 +21,7 @@
     <!-- /.content-header -->
 
     <!--<a href="{{ route('activite_saisies.create') }}" class="btn btn-primary my-3"><i class="fas fa-plus-circle"></i><span> Nouvelle activité </span></a>-->
-    
+
 <div class="card card-info collapsed-card">
     <div class="card-header">
         <h3 class="card-title">Nouvelle activité</h3>
@@ -32,8 +32,8 @@
             </button>
         </div>
     </div>
-     <div class="card-body"> 
-     <div class="container-fluid"> 
+     <div class="card-body">
+     <div class="container-fluid">
         <form action="{{ route('activite_saisies_create_rapport') }}"  method="POST" enctype="multipart/form-data">
         @csrf
             <div class="form-group row">
@@ -45,14 +45,14 @@
                           @endforeach
                       </select>
                   </div>
-              </div>             
+              </div>
             <div class="text-center">
                 <button class="btn btn-primary my-3"> Suivant <i class="fas fa-angle-right"></i></button>
             </div>
         </form>
-    </div> 
     </div>
-</div>                      
+    </div>
+</div>
 
     <!-- cadre general -->
 <div class="card card-secondary direct-chat direct-chat-secondary">
@@ -86,7 +86,7 @@
                                     <th scope="row"> {{++$key}} </th>
                                     <td> <a href="{{ route('activite_saisies.show', ['activite_saisy' => $activite_saisy->id]) }}"> {{$activite_saisy->TitreActiviteSaisie}} </a></td>
                                     <th scope="row"> {{$activite_saisy->LibelleFonction}} </th>
-                                    <th scope="row"> {{$activite_saisy->LibelleRapport}} </th>
+                                    <th scope="row"> <a href="{{ route('activite_rapport', ['id_rapport' => $activite_saisy->id_rapport]) }}"> {{$activite_saisy->LibelleRapport}} </a> </th>
                                        <!-- envoie de l'id de l'activite cela passe par fichers.create ensuite fichers.form-->
                                     <td> <a href="{{ route('fichier', ['activite_saisy' => $activite_saisy->id]) }}" class="btn btn-success"> <i class="fas fa-file"></i><span> Joindre un fichier </span> </a></td>
                                     </tr>
