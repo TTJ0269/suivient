@@ -17,7 +17,7 @@
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
-    <!-- /.content-header --> 
+    <!-- /.content-header -->
 
         <!-- cadre general -->
 <div class="card card-secondary direct-chat direct-chat-secondary">
@@ -28,14 +28,14 @@
     </div>
   </div>
   <!-- /fin cadre -->
-  
+
 
     <!-- Main content -->
     <div class="content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-12">
-                    <div class="card-body">  
+                    <div class="card-body">
                             <!--<form action="{{ route('rapports.destroy', ['rapport' => $rapport->id]) }}" method="POST" style="display: inline;">
                             @csrf
                             @method('DELETE')
@@ -53,16 +53,17 @@
                 </div>
               </div>
 
-              <div class="card-body"> 
+              <div class="card-body">
 
                     <div class="row">
                       <div class="col-12 col-sm-8">
                         <div class="form-group">
+                            <h6><strong> Administrateur-Animateur ENT : {{$rapport->ifad_moniteur->user->nomutilisateur}} {{$rapport->ifad_moniteur->user->prenomutilisateur}} </strong></h6>
                         </div>
                       </div>
 
                       <div class="col-12 col-sm-4">
-                        <div class="form-group"> 
+                        <div class="form-group">
                             <div class="form-group clearfix">
                               <h6><strong> (0) Non observé </strong></h6>
                               <h6><strong> (1) L'activité a été observée </strong></h6>
@@ -93,7 +94,7 @@
                                       {{$acitivite_positionnement->LibelleActivite}} __
                                       "{{$acitivite_positionnement->ValeurPost}}".
                                       <hr>
-                              @endforeach 
+                              @endforeach
                             </th>
                             <th scope="row"> {{ $collection[2]}} min</th>
                             </tr>
@@ -135,7 +136,7 @@
                           <th scope="row">
                                 <form action="{{ route('rapport_ficher') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
-                                <input type="number" hidden  name="activite_saisie_id" value="{{$activite->id}}"/> 
+                                <input type="number" hidden  name="activite_saisie_id" value="{{$activite->id}}"/>
                                   <button type="submit" class="btn btn-primary my-1"><i class="fas fa-eye"></i><span> Fichier </span></button>
                                 </form>
                                 <!-- debut Ajouter un commentaire-->

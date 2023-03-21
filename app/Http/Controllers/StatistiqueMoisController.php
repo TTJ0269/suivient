@@ -47,7 +47,7 @@ class StatistiqueMoisController extends Controller
             $annee = request('annee');
             $date = $annee.'-'.$mois;
             $format = Date::make($date.'-01 00:00:00')->format('m-Y');
-            
+
             if($date == null || $user == null)
             {
                 return back()->with('messagealert', "Choisir l'utilisateur.");
@@ -94,7 +94,7 @@ class StatistiqueMoisController extends Controller
                         $activite_positionnements[$f] = DB::table('users')
                         ->join('ifad_moniteurs','users.id','=','ifad_moniteurs.user_id')
                         ->join('rapports','ifad_moniteurs.id','=','rapports.ifad_moniteur_id')
-                        ->join('livret_positionnements','rapports.id','=','livret_positionnements.rapport_id') 
+                        ->join('livret_positionnements','rapports.id','=','livret_positionnements.rapport_id')
                         ->join('positionnements','livret_positionnements.id','=','positionnements.livret_positionnement_id')
                         ->join('activites','activites.id','=','positionnements.activite_id')
                         ->join('type_activites','type_activites.id','=','activites.type_activite_id')
@@ -104,19 +104,14 @@ class StatistiqueMoisController extends Controller
                         ->where('livret_positionnements.DateEnregistrement','like',"%$date%")
                         ->where('users.id','=',$user)
                         ->groupBy('type_activites.id','fonctions.id','type_activites.LibelleType')
-                        ->get(); 
-                        
-                        
+                        ->get();
 
-                        $collection_fonctions[$f] = collect([$fonction_id[$f],$fonction_libelle[$f],$activite_positionnements[$f]])->all();
+
+
+                        $collection_fonctions[$f] = collect(['fonction_id' => $fonction_id[$f], 'fonction_libelle' => $fonction_libelle[$f], 'activite_posits' => $activite_positionnements[$f]])->all();
 
                         $f++;
                     }
-                    $fonction_une = $collection_fonctions[1];
-                    $fonction_deux = $collection_fonctions[2];
-                    $fonction_trois = $collection_fonctions[3];
-                    $fonction_quatre = $collection_fonctions[4];
-                    $fonction_cinq = $collection_fonctions[5];
                     /** HeureActivite **/
                     $nombre_heures = $this->HeureActivite();
 
@@ -124,7 +119,7 @@ class StatistiqueMoisController extends Controller
                     $tempstotal = DB::table('users')
                     ->join('ifad_moniteurs','users.id','=','ifad_moniteurs.user_id')
                     ->join('rapports','ifad_moniteurs.id','=','rapports.ifad_moniteur_id')
-                    ->join('livret_positionnements','rapports.id','=','livret_positionnements.rapport_id') 
+                    ->join('livret_positionnements','rapports.id','=','livret_positionnements.rapport_id')
                     ->join('temps_types','livret_positionnements.id','=','temps_types.livret_positionnement_id')
                     ->select(DB::raw('SUM(temps_types.TempsPost)*60 as tempstotal'))
                     ->where('users.id','=',$user)
@@ -138,10 +133,10 @@ class StatistiqueMoisController extends Controller
                     $activites = $this->ActivitesConfiees();
 
 
-                    return view('statistiques.mois_generale',compact('fonction_une','fonction_deux','fonction_trois','fonction_quatre','fonction_cinq','nombre_heures','activites','users','evaluations','tempstotal','ifad','format'));
+                    return view('statistiques.mois_generale',compact('collection_fonctions','nombre_heures','activites','users','evaluations','tempstotal','ifad','format'));
 
                 }
-                
+
             }
         }
         catch(\Exception $exception)
@@ -164,7 +159,7 @@ class StatistiqueMoisController extends Controller
             $tempstotal = DB::table('users')
             ->join('ifad_moniteurs','users.id','=','ifad_moniteurs.user_id')
             ->join('rapports','ifad_moniteurs.id','=','rapports.ifad_moniteur_id')
-            ->join('livret_positionnements','rapports.id','=','livret_positionnements.rapport_id') 
+            ->join('livret_positionnements','rapports.id','=','livret_positionnements.rapport_id')
             ->join('temps_types','livret_positionnements.id','=','temps_types.livret_positionnement_id')
             ->select(DB::raw('SUM(temps_types.TempsPost) as tempstotal'))
             ->where('users.id','=',$user)
@@ -176,7 +171,7 @@ class StatistiqueMoisController extends Controller
             $fonction_temps = DB::table('users')
             ->join('ifad_moniteurs','users.id','=','ifad_moniteurs.user_id')
             ->join('rapports','ifad_moniteurs.id','=','rapports.ifad_moniteur_id')
-            ->join('livret_positionnements','rapports.id','=','livret_positionnements.rapport_id') 
+            ->join('livret_positionnements','rapports.id','=','livret_positionnements.rapport_id')
             ->join('temps_types','livret_positionnements.id','=','temps_types.livret_positionnement_id')
             ->join('type_activites','type_activites.id','=','temps_types.type_activite_id')
             ->join('fonctions','fonctions.id','=','type_activites.fonction_id')
@@ -188,7 +183,7 @@ class StatistiqueMoisController extends Controller
             ->groupBy('fonctions.id','fonctions.LibelleFonction')
             ->get();
 
-            return $fonction_temps;  
+            return $fonction_temps;
         }
         catch(\Exception $exception)
         {
@@ -204,7 +199,7 @@ class StatistiqueMoisController extends Controller
             $mois = request('mois');
             $annee = request('annee');
             $date = $annee.'-'.$mois;
-            
+
             $evaluation_livret = DB::table('users')
             ->join('ifad_moniteurs','users.id','=','ifad_moniteurs.user_id')
             ->join('placements','ifad_moniteurs.id','=','placements.ifad_moniteur_id')
@@ -248,7 +243,7 @@ class StatistiqueMoisController extends Controller
                     $activites_confiees_fonction[$f] = DB::table('users')
                     ->join('ifad_moniteurs','users.id','=','ifad_moniteurs.user_id')
                     ->join('rapports','ifad_moniteurs.id','=','rapports.ifad_moniteur_id')
-                    ->join('livret_positionnements','rapports.id','=','livret_positionnements.rapport_id') 
+                    ->join('livret_positionnements','rapports.id','=','livret_positionnements.rapport_id')
                     ->join('positionnements','livret_positionnements.id','=','positionnements.livret_positionnement_id')
                     ->join('activites','activites.id','=','positionnements.activite_id')
                     ->join('type_activites','type_activites.id','=','activites.type_activite_id')
@@ -257,13 +252,13 @@ class StatistiqueMoisController extends Controller
                     ->where('fonctions.id','=',$fonction_id[$f])
                     ->where('users.id','=',$user)
                     ->where('livret_positionnements.DateEnregistrement','like',"%$date%")
-                    ->groupBy('fonctions.id','fonctions.LibelleFonction') 
-                    ->first()->valeur; 
+                    ->groupBy('fonctions.id','fonctions.LibelleFonction')
+                    ->first()->valeur;
 
                     if(DB::table('users')
                     ->join('ifad_moniteurs','users.id','=','ifad_moniteurs.user_id')
                     ->join('rapports','ifad_moniteurs.id','=','rapports.ifad_moniteur_id')
-                    ->join('livret_positionnements','rapports.id','=','livret_positionnements.rapport_id') 
+                    ->join('livret_positionnements','rapports.id','=','livret_positionnements.rapport_id')
                     ->join('positionnements','livret_positionnements.id','=','positionnements.livret_positionnement_id')
                     ->join('activites','activites.id','=','positionnements.activite_id')
                     ->join('type_activites','type_activites.id','=','activites.type_activite_id')
@@ -282,7 +277,7 @@ class StatistiqueMoisController extends Controller
                         $activites_confiees[$f] = DB::table('users')
                         ->join('ifad_moniteurs','users.id','=','ifad_moniteurs.user_id')
                         ->join('rapports','ifad_moniteurs.id','=','rapports.ifad_moniteur_id')
-                        ->join('livret_positionnements','rapports.id','=','livret_positionnements.rapport_id') 
+                        ->join('livret_positionnements','rapports.id','=','livret_positionnements.rapport_id')
                         ->join('positionnements','livret_positionnements.id','=','positionnements.livret_positionnement_id')
                         ->join('activites','activites.id','=','positionnements.activite_id')
                         ->join('type_activites','type_activites.id','=','activites.type_activite_id')
@@ -292,16 +287,16 @@ class StatistiqueMoisController extends Controller
                         ->where('livret_positionnements.DateEnregistrement','like',"%$date%")
                         ->where('users.id','=',$user)
                         ->where('positionnements.ValeurPost','<>',0)
-                        ->groupBy('fonctions.id','fonctions.LibelleFonction') 
-                        ->first()->valeur_activite; 
+                        ->groupBy('fonctions.id','fonctions.LibelleFonction')
+                        ->first()->valeur_activite;
                     }
 
                     $operations[$f] = round((($activites_confiees[$f]/$activites_confiees_fonction[$f])*100),2);
 
-                    $activites_conf[$f] = collect([$fonction_libelle[$f],$operations[$f]]);
+                    $activites_conf[$f] = collect(['fonction_libelle' => $fonction_libelle[$f], 'operation' => $operations[$f]]);
 
                     $f++;
-                }       
+                }
 
             return $activites_conf;
         }

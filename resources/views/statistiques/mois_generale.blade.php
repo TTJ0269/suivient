@@ -28,12 +28,12 @@
           return $heures  .  ":"  .  $minutes  .  ":"  .  $secondes . "0";
         }
     ?>
- 
+
     <div class="container">
                <div class="text-center">
                   <img src="{{ asset('storage/imageifad/aedsuivi.png') }}" class="img elevation" style="width: 200px; height: 100px;" alt="AED Image">
                </div>
-   
+
         <div class="row my-2">
             <div class="col-12 col-sm-5">
               <div class="form-group">
@@ -50,7 +50,7 @@
               </div>
             </div>
             <div class="col-12 col-sm-7">
-              <div class="form-group"> 
+              <div class="form-group">
                      <div class="text-center">
                        <h4 style="color:blue;"><strong> Nombre d'heure par fonction </strong></h4>
                      </div>
@@ -89,99 +89,33 @@
                       <i class="fas fa-minus"></i>
                       </button>
                   </div>
-              </div>       
-              <div class="card-body"> 
+              </div>
+              <div class="card-body">
                   <div class="chart">
                     <canvas id="activite"></canvas>
                   </div>
                </div>
-            </div> 
+            </div>
 
-            <div class="card card-info">
-                <div class="card-header">
-                    <h3 class="card-title">F1: {{$fonction_une[1]}}</h3>
+            @foreach ($collection_fonctions as $collection_fonction)
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Fonction : {{$collection_fonction['fonction_libelle']}}</h3>
 
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                        <i class="fas fa-minus"></i>
-                        </button>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
                     </div>
-                </div>       
-                <div class="card-body">
-                    <div class="chart">
-                      <a href="#"> </a>
-                      <canvas id="fonction_une"></canvas>
-                    </div>
-                </div>
-             </div>
-
-             <div class="card card-info">
-                <div class="card-header">
-                    <h3 class="card-title">F2: {{$fonction_deux[1]}}</h3>
-
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                        <i class="fas fa-minus"></i>
-                        </button>
-                    </div>
-                </div>       
-                <div class="card-body">
-                    <div class="chart">
-                      <canvas id="fonction_deux"></canvas>
+                    <div class="card-body">
+                        <div class="chart">
+                        <a href="#"> </a>
+                        <canvas id="fonction{{$collection_fonction['fonction_id']}}"></canvas>
+                        </div>
                     </div>
                 </div>
-              </div>
-
-              <div class="card card-info">
-                  <div class="card-header">
-                      <h3 class="card-title">F3: {{$fonction_trois[1]}}</h3>
-
-                      <div class="card-tools">
-                          <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                          <i class="fas fa-minus"></i>
-                          </button>
-                      </div>
-                  </div>       
-                  <div class="card-body">
-                    <div class="chart">
-                      <canvas id="fonction_trois"></canvas>
-                    </div>
-                  </div>
-              </div>
-
-               <div class="card card-info">
-                  <div class="card-header">
-                      <h3 class="card-title">F4: {{$fonction_quatre[1]}}</h3>
-
-                      <div class="card-tools">
-                          <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                          <i class="fas fa-minus"></i>
-                          </button>
-                      </div>
-                  </div>       
-                  <div class="card-body">
-                    <div class="chart">
-                      <canvas id="fonction_quatre"></canvas>
-                    </div>
-                  </div>
-               </div>
-
-              <div class="card card-info">
-                  <div class="card-header">
-                      <h3 class="card-title">F5: {{$fonction_cinq[1]}}</h3>
-
-                      <div class="card-tools">
-                          <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                          <i class="fas fa-minus"></i>
-                          </button>
-                      </div>
-                  </div>       
-                  <div class="card-body">
-                    <div class="chart">
-                      <canvas id="fonction_cinq"></canvas>
-                    </div> 
-                  </div>
-               </div>  
+             @endforeach
 
                 <div class="card card-info">
                   <div class="card-header">
@@ -192,13 +126,13 @@
                           <i class="fas fa-minus"></i>
                           </button>
                       </div>
-                  </div>       
+                  </div>
                   <div class="card-body">
                     <div class="col-8 chart">
                       <canvas id="nombre_heure" width="500" height="400"></canvas>
                     </div>
                   </div>
-                </div> 
+                </div>
 
                 <div class="card card-info">
                   <div class="card-header">
@@ -209,13 +143,13 @@
                           <i class="fas fa-minus"></i>
                           </button>
                       </div>
-                  </div>       
+                  </div>
                   <div class="card-body">
                     <div class="col-8 chart">
                       <canvas id="evaluation" width="500" height="350"></canvas>
                     </div>
                   </div>
-                </div> 
+                </div>
 
                 <br>
     </div>

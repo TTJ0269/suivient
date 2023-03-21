@@ -87,6 +87,11 @@ class PositionnementController extends Controller
            {
             return back()->with('messagealert', 'Vous vous êtes déjà positionner par rapport à la semaine sélectionnée');
            }
+           if(DB::table('fonctions')->join('type_activites','fonctions.id','=','type_activites.fonction_id')
+            ->join('activites','type_activites.id','=','activites.type_activite_id')->select('activites.id')->doesntExist())
+           {
+            return back()->with('messagealert', "Ajouter au moins une activité au fonction de l'Administrateur-Animateur ENT.");
+           }
            else
            {
               $positionnement = new Positionnement();
@@ -100,40 +105,36 @@ class PositionnementController extends Controller
                   $tab_fonction_Libelle[$f] = $fonction->LibelleFonction;
 
 
-                  $tab_type_activite[$f] = DB::table('fonctions')
-                  ->join('type_activites','fonctions.id','=','type_activites.fonction_id')
-                  ->select('type_activites.id','type_activites.LibelleType')
-                  ->where('fonctions.id','=',$tab_fonction_id[$f])
-                  ->orderBy('fonctions.id')
-                  ->get();
+                  /** selection des activites classes par type d'activite **/
+                 $type_activites[$f] = TypeActivite::select('*')->where('fonction_id','=',$tab_fonction_id[$f])->orderBy('id')->distinct('id')->get();
 
-                  $fonction_type_activites[$f] = collect([$tab_fonction_Libelle[$f],$tab_type_activite[$f]])->all();
-                  $f++;
+                 $i = 0;
+                foreach($type_activites[$f] as $type_activite)
+                {
+                    $tab_typeactivite_id[$i] = $type_activite->id;
+                    $tab_typeactivite_Libelle[$i] = $type_activite->LibelleType;
+
+
+                    $tab_activite[$i] = DB::table('activites')
+                    ->select('activites.id','activites.LibelleActivite')
+                    ->where('activites.type_activite_id','=',$tab_typeactivite_id[$i])
+                    ->orderBy('activites.type_activite_id')
+                    ->get();
+
+                    $collections[$i] = collect(['typeactivite_id' => $tab_typeactivite_id[$i],'typeactivite_libelle' => $tab_typeactivite_Libelle[$i], 'activites' =>$tab_activite[$i]])->all();
+
+                    $i++;
+                }
+
+                    $fonctions[$f] = collect(['fonction_id' => $tab_fonction_id[$f],'fonction_libelle' => $tab_fonction_Libelle[$f],'typeactivites' => $collections])->all();
+                    /** vider le contenu avant de reprendre **/
+                    $collections = null;
+
+                    $f++;
               }
+              //dd($fonctions);
 
-              /** selection des activites classes par type d'activite **/
-              $type_activites = TypeActivite::select('*')->orderBy('type_activites.id')->get();
-
-              $i = 0;
-              foreach($type_activites as $type_activite)
-              {
-                  $tab_typeactivite_id[$i] = $type_activite->id;
-                  $tab_typeactivite_Libelle[$i] = $type_activite->LibelleType;
-
-
-                  $tab_activite[$i] = DB::table('type_activites')
-                  ->join('activites','type_activites.id','=','activites.type_activite_id')
-                  ->select('activites.id','activites.LibelleActivite')
-                  ->where('type_activites.id','=',$tab_typeactivite_id[$i])
-                  ->orderBy('type_activites.id')
-                  ->get();
-
-                  $collections[$i] = collect([$tab_typeactivite_id[$i],$tab_typeactivite_Libelle[$i],$tab_activite[$i]])->all();
-
-                  $i++;
-              }
-
-              return view('positionnements.create',compact('collections','fonction_type_activites','semaine_livret'));
+              return view('positionnements.create',compact('fonctions','semaine_livret'));
         }
 
         }

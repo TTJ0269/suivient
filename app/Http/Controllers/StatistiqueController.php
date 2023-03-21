@@ -29,7 +29,7 @@ class StatistiqueController extends Controller
           ->select('type_utilisateurs.*')
           ->first();
 
-          if($type_utilisateur->libelletype == 'DG IFAD') 
+          if($type_utilisateur->libelletype == 'DG IFAD')
           {
             if (DB::table('ifad_moniteurs')->where('user_id', $user_id)->doesntExist())
             {
@@ -55,7 +55,7 @@ class StatistiqueController extends Controller
                 return view('statistiques.index',compact('users'));
             }
           }
-         else 
+         else
          {
             $users = DB::table('type_utilisateurs')
             ->join('users','type_utilisateurs.id','=','users.type_utilisateur_id')
@@ -91,7 +91,7 @@ class StatistiqueController extends Controller
           ->select('type_utilisateurs.*')
           ->first();
 
-          if($type_utilisateur->libelletype == 'DG IFAD') 
+          if($type_utilisateur->libelletype == 'DG IFAD')
           {
             if (DB::table('ifad_moniteurs')->where('user_id', $user_id)->doesntExist())
             {
@@ -127,8 +127,8 @@ class StatistiqueController extends Controller
             ->orderBy('livret_positionnements.id','DESC')
             ->limit(10)->get();
           }
-            
-            if (count($livrets) > 0) 
+
+            if (count($livrets) > 0)
             {
                 return response()->json($livrets);
             }
@@ -145,7 +145,7 @@ class StatistiqueController extends Controller
         try
         {
             $livret_id = request('livret_id');
-            
+
             if($livret_id == null)
             {
                 return back()->with('messagealert', 'Sélectionner un livret.');
@@ -157,7 +157,7 @@ class StatistiqueController extends Controller
                  $users = DB::table('users')
                  ->join('ifad_moniteurs','users.id','=','ifad_moniteurs.user_id')
                  ->join('rapports','ifad_moniteurs.id','=','rapports.ifad_moniteur_id')
-                 ->join('livret_positionnements','rapports.id','=','livret_positionnements.rapport_id') 
+                 ->join('livret_positionnements','rapports.id','=','livret_positionnements.rapport_id')
                  ->select('users.*','livret_positionnements.id as livret_id','livret_positionnements.LibelleLivret','livret_positionnements.DateEnregistrement')
                  ->where('livret_positionnements.id','=',$livret_id)
                  ->get();
@@ -192,19 +192,14 @@ class StatistiqueController extends Controller
                     ->where('fonctions.id','=',$fonction_id[$f])
                     ->where('livret_positionnements.id','=',$livret_id)
                     ->groupBy('type_activites.id','fonctions.id','type_activites.LibelleType')
-                    ->get(); 
-                    
-                    
+                    ->get();
 
-                    $collection_fonctions[$f] = collect([$fonction_id[$f],$fonction_libelle[$f],$activite_positionnements[$f]])->all();
+
+
+                    $collection_fonctions[$f] = collect(['fonction_id' => $fonction_id[$f], 'fonction_libelle' => $fonction_libelle[$f], 'activite_posits' => $activite_positionnements[$f]])->all();
 
                     $f++;
             }
-            $fonction_une = $collection_fonctions[1];
-            $fonction_deux = $collection_fonctions[2];
-            $fonction_trois = $collection_fonctions[3];
-            $fonction_quatre = $collection_fonctions[4];
-            $fonction_cinq = $collection_fonctions[5];
             /** HeureActivite **/
             $nombre_heures = $this->HeureActivite();
 
@@ -225,7 +220,7 @@ class StatistiqueController extends Controller
             $activites = $this->ActivitesConfiees();
 
 
-            return view('statistiques.generale',compact('fonction_une','fonction_deux','fonction_trois','fonction_quatre','fonction_cinq','nombre_heures','activites','users','tempstotal','ifad'));
+            return view('statistiques.generale',compact('collection_fonctions','nombre_heures','activites','users','tempstotal','ifad'));
 
             }
         }
@@ -262,7 +257,7 @@ class StatistiqueController extends Controller
             ->groupBy('fonctions.id','fonctions.LibelleFonction')
             ->get();
 
-            return $fonction_temps;  
+            return $fonction_temps;
         }
         catch(\Exception $exception)
         {
@@ -296,8 +291,8 @@ class StatistiqueController extends Controller
                     ->select('fonctions.id','fonctions.LibelleFonction',DB::raw('COUNT(positionnements.ValeurPost) as valeur'))
                     ->where('fonctions.id','=',$fonction_id[$f])
                     ->where('livret_positionnements.id','=',$livret_id)
-                    ->groupBy('fonctions.id','fonctions.LibelleFonction') 
-                    ->first()->valeur; 
+                    ->groupBy('fonctions.id','fonctions.LibelleFonction')
+                    ->first()->valeur;
 
                     if(DB::table('livret_positionnements')
                     ->join('positionnements','livret_positionnements.id','=','positionnements.livret_positionnement_id')
@@ -323,17 +318,17 @@ class StatistiqueController extends Controller
                         ->where('fonctions.id','=',$fonction_id[$f])
                         ->where('livret_positionnements.id','=',$livret_id)
                         ->where('positionnements.ValeurPost','<>',0)
-                        ->groupBy('fonctions.id','fonctions.LibelleFonction') 
-                        ->first()->valeur_activite; 
+                        ->groupBy('fonctions.id','fonctions.LibelleFonction')
+                        ->first()->valeur_activite;
                     }
-                     
+
 
                     $operations[$f] = round((($activites_confiees[$f]/$activites_confiees_fonction[$f])*100),2);
 
-                    $activites_conf[$f] = collect([$fonction_libelle[$f],$operations[$f]]);
+                    $activites_conf[$f] = collect(['fonction_libelle' => $fonction_libelle[$f], 'operation' => $operations[$f]]);
 
                     $f++;
-                }   
+                }
 
             return $activites_conf;
         }

@@ -7,8 +7,8 @@
 
  <!-- statistique -->
  <link rel="stylesheet" type="text/css" href="{{ asset('css/mystyle.css') }}">
- <link rel="stylesheet" href="{{ asset('statistiquechart.css') }}" 
- integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w==" 
+ <link rel="stylesheet" href="{{ asset('statistiquechart.css') }}"
+ integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w=="
  crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <!-- Google Font: Source Sans Pro -->
@@ -50,7 +50,7 @@
 
   <div class="content-wrapper">
     <!-- Main content -->
-                          @if (session()->has('message')) 
+                          @if (session()->has('message'))
                           <div class="btn btn-success btn-block" role="alert">
                           {{ session()->get('message') }}
                           </div>
@@ -80,8 +80,8 @@
   $.widget.bridge('uibutton', $.ui.button)
 </script>
 <!-- statistique -->
-<script src="{{ asset('js/statistiquechart.js') }}" 
-integrity="sha512-s+xg36jbIujB2S2VKfpGmlC3T5V2TF3lY48DX7u2r9XzGzgPsa6wTpOQA7J9iffvdeBN0q9tKzRxVxw1JviZPg==" 
+<script src="{{ asset('js/statistiquechart.js') }}"
+integrity="sha512-s+xg36jbIujB2S2VKfpGmlC3T5V2TF3lY48DX7u2r9XzGzgPsa6wTpOQA7J9iffvdeBN0q9tKzRxVxw1JviZPg=="
 crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <!-- jQuery -->
 <script src="{{ asset('vendors/plugins/jquery/jquery.min.js') }}"></script>
@@ -148,7 +148,7 @@ const splitString = (text, chunkSize) => {
 <script>
 let labelsactivite = [
                   @foreach ($activites as $activite)
-                    splitString(('{{ $activite[0] }} "{{ $activite[1]}}%"'),2),
+                    splitString(('{{ $activite['fonction_libelle'] }} "{{ $activite['operation']}}%"'),2),
                   @endforeach
               ];
 let myChartactivite = document.getElementById("activite").getContext('2d');
@@ -167,7 +167,7 @@ let activite = new Chart(myChartactivite, {
             pointBackgroundColor: "rgba(25, 25, 25, 5)",
             data: [
               @foreach ($activites as $activite)
-                  '{{ $activite[1] }}',
+                  '{{ $activite['operation'] }}',
               @endforeach
               ]
           }
@@ -176,16 +176,16 @@ let activite = new Chart(myChartactivite, {
     options: {
        responsive: true,
         legend: {
-        position: 'top',     
+        position: 'top',
             labels: {
-                fontSize:20,  
+                fontSize:20,
                 fontColor: 'blue'
             }
         },
         title: {
             text: "",
             display: true,
-            fontSize:24, 
+            fontSize:24,
             fontColor: 'blue'
         },
         scale: {
@@ -210,390 +210,131 @@ let activite = new Chart(myChartactivite, {
     }
 });
 </script>
-<!-- Fin Activites confiees--> 
-
-<!-- Debut fonction une-->
-<script>
-let labelsfonction_une = [
-                @foreach ($fonction_une[2] as $positionnement)
-                  splitString(('{{ $positionnement->LibelleType }} "{{round($positionnement->position,0) }}"'),3),
-                @endforeach
-              ];
-let myChartfonction_une = document.getElementById("fonction_une").getContext('2d');
-
-let fonction_une = new Chart(myChartfonction_une, {
-    type: 'radar',
-    data: {
-        labels: labelsfonction_une,
-        datasets: [
-          {
-            label: '{{$fonction_une[1]}}',
-            fillColor: "rgba(25, 25, 25, 5)",
-            backgroundColor: "rgba(0, 0, 255, 0.3)",
-            borderColor: "rgba(54, 162, 235, 1)",
-            pointBorderColor: "#191919",
-            pointBackgroundColor: "rgba(25, 25, 25, 5)",
-            data: [
-              @foreach ($fonction_une[2] as $positionnement)
-                '{{ $positionnement->position }}',
-              @endforeach
-              ]
-          }
-        ]
-    },
-    options: {
-       responsive: true,
-        legend: {
-        position: 'top',     
-            labels: {
-                fontSize:20,
-                fontColor: 'blue'  
-            }
-        },
-        title: {
-            text: "",
-            display: true
-        },
-        scale: {
-          ticks: {
-              fontSize: 15,
-              fontColor: 'black',
-              max: 4,
-              min: 0,
-              stepSize: 1,
-          },
-          angleLines: {
-            color: 'red'
-          },
-          gridLines: {
-            color: 'black'
-          },
-          pointLabels: {
-            fontSize: 17,
-            fontColor: 'black'
-          }
-       }
-    }
-});
-</script>
-<!-- Fin fonction une-->
-
-<!-- Debut fonction deux-->
-<script>
-let labelsfonction_deux = [
-                @foreach ($fonction_deux[2] as $positionnement)
-                  splitString(('{{ $positionnement->LibelleType }} "{{round($positionnement->position,0) }}"'),3),
-                @endforeach
-              ];
-let myChartfonction_deux = document.getElementById("fonction_deux").getContext('2d');
-
-let fonction_deux = new Chart(myChartfonction_deux, {
-    type: 'radar',
-    data: {
-        labels: labelsfonction_deux,
-        datasets: [
-          {
-            label: '{{$fonction_deux[1]}}',
-            fillColor: "rgba(25, 25, 25, 5)",
-            backgroundColor: "rgba(0, 0, 255, 0.3)",
-            borderColor: "rgba(54, 162, 235, 1)",
-            pointBorderColor: "#191919",
-            pointBackgroundColor: "rgba(25, 25, 25, 5)",
-            data: [
-              @foreach ($fonction_deux[2] as $positionnement)
-                '{{ $positionnement->position }}',
-              @endforeach
-              ]
-          }
-        ]
-    },
-    options: {
-       responsive: true,
-        legend: {
-          align: 'start',
-        position: 'top',     
-            labels: {
-                fontSize:20,  
-                fontColor: 'blue'  
-            }
-        },
-        title: {
-            text: "",
-            display: true
-        },
-        scale: {
-          ticks: {
-              fontSize: 15,
-              fontColor: 'black',
-              max: 4,
-              min: 0,
-              stepSize: 1,
-          },
-          angleLines: {
-            color: 'red'
-          },
-          gridLines: {
-            color: 'black'
-          },
-          pointLabels: {
-            fontSize: 18,
-            fontColor: 'black'
-          }
-       }
-    }
-});
-</script>
-<!-- Fin fonction deux-->
-
-<!-- Debut fonction trois-->
-<script>
-let labelsfonction_trois = [
-                @foreach ($fonction_trois[2] as $positionnement)
-                  splitString(('{{ $positionnement->LibelleType }} "{{round($positionnement->position,0) }}"'),3),
-                @endforeach
-              ];
-let myChartfonction_trois = document.getElementById("fonction_trois").getContext('2d');
-
-let fonction_trois = new Chart(myChartfonction_trois, {
-    type: 'radar',
-    data: {
-        labels: labelsfonction_trois,
-        datasets: [
-          {
-            label: '{{$fonction_trois[1]}}',
-            fillColor: "rgba(25, 25, 25, 5)",
-            backgroundColor: "rgba(0, 0, 255, 0.3)",
-            borderColor: "rgba(54, 162, 235, 1)",
-            pointBorderColor: "#191919",
-            pointBackgroundColor: "rgba(25, 25, 25, 5)",
-            data: [
-              @foreach ($fonction_trois[2] as $positionnement)
-                '{{ $positionnement->position }}',
-              @endforeach
-              ]
-          }
-        ]
-    },
-    options: {
-       responsive: true,
-        legend: {
-        position: 'top',     
-            labels: {
-                fontSize:20,  
-                fontColor: 'blue'  
-            }
-        },
-        title: {
-            text: "",
-            display: true
-        },
-        scale: {
-          ticks: {
-              fontSize: 15,
-              fontColor: 'black',
-              max: 4,
-              min: 0,
-              stepSize: 1,
-          },
-          angleLines: {
-            color: 'red'
-          },
-          gridLines: {
-            color: 'black'
-          },
-          pointLabels: {
-            fontSize: 17,
-            fontColor: 'black'
-          }
-       }
-    }
-});
-</script>
-<!-- Fin fonction trois-->
-
-<!-- Debut fonction quatre-->
-<script>
-let labelsfonction_quatre = [
-                @foreach ($fonction_quatre[2] as $positionnement)
-                  splitString(('{{ $positionnement->LibelleType }} "{{round($positionnement->position,0) }}"'),3),
-                @endforeach
-              ];
-let myChartfonction_quatre = document.getElementById("fonction_quatre").getContext('2d');
-
-let fonction_quatre = new Chart(myChartfonction_quatre, {
-    type: 'radar',
-    data: {
-        labels: labelsfonction_quatre,
-        datasets: [
-          {
-            label: '{{$fonction_quatre[1]}}',
-            fillColor: "rgba(25, 25, 25, 5)",
-            backgroundColor: "rgba(0, 0, 255, 0.3)",
-            borderColor: "rgba(54, 162, 235, 1)",
-            pointBorderColor: "#191919",
-            pointBackgroundColor: "rgba(25, 25, 25, 5)",
-            data: [
-              @foreach ($fonction_quatre[2] as $positionnement)
-                '{{ $positionnement->position }}',
-              @endforeach
-              ]
-          }
-        ]
-    },
-    options: {
-       responsive: true,
-        legend: {
-        position: 'top',     
-            labels: {
-                fontSize:20,  
-                fontColor: 'blue'  
-            }
-        },
-        title: {
-            text: "",
-            display: true
-        },
-        scale: {
-          ticks: {
-              fontSize: 15,
-              fontColor: 'black',
-              max: 4,
-              min: 0,
-              stepSize: 1,
-          },
-          angleLines: {
-            color: 'red'
-          },
-          gridLines: {
-            color: 'black'
-          },
-          pointLabels: {
-            fontSize: 17,
-            fontColor: 'black'
-          }
-       }
-    }
-});
-</script>
-<!-- Fin fonction quatre-->
-
-<!-- Debut fonction cinq-->
-<script>
-let labelsfonction_cinq = [
-                @foreach ($fonction_cinq[2] as $positionnement)
-                  splitString(('{{ $positionnement->LibelleType }} "{{round($positionnement->position,0) }}"'),3),
-                @endforeach
-              ];
-let myChartfonction_cinq = document.getElementById("fonction_cinq").getContext('2d');
-
-let fonction_cinq = new Chart(myChartfonction_cinq, {
-    type: 'radar',
-    data: {
-        labels: labelsfonction_cinq,
-        datasets: [
-          {
-            label: '{{$fonction_cinq[1]}}',
-            fillColor: "rgba(25, 25, 25, 5)",
-            backgroundColor: "rgba(0, 0, 255, 0.3)",
-            borderColor: "rgba(54, 162, 235, 1)",
-            pointBorderColor: "#191919",
-            pointBackgroundColor: "rgba(25, 25, 25, 5)",
-            data: [
-              @foreach ($fonction_cinq[2] as $positionnement)
-                '{{ $positionnement->position }}',
-              @endforeach
-              ]
-          }
-        ]
-    },
-    options: {
-       responsive: true,
-        legend: {
-        position: 'top',     
-            labels: {
-                fontSize:20,  
-                fontColor: 'blue'  
-            }
-        },
-        title: {
-            text: "",
-            display: true
-        },
-        scale: {
-          ticks: {
-              fontSize: 15,
-              fontColor: 'black',
-              max: 4,
-              min: 0,
-              stepSize: 1,
-          },
-          angleLines: {
-            color: 'red'
-          },
-          gridLines: {
-            color: 'black'
-          },
-          pointLabels: {
-            fontSize: 17,
-            fontColor: 'black'
-          }
-       }
-    }
-});
-</script>
-<!-- Fin fonction cinq-->
+<!-- Fin Activites confiees-->
 
 <!-- Début nombre heure par fonction-->
 <script>
-let labelsnombre_heure = [
-                @foreach ($nombre_heures as $nombre_heure)
-                      ' {{ round($nombre_heure->temps,0) }}% - {{ $nombre_heure->LibelleFonction }}',
-                @endforeach
-              ];
-let datanombre_heure = [
-              @foreach ($nombre_heures as $nombre_heure)
-                      '{{ $nombre_heure->seconde }}',
-              @endforeach
-            ];
-let colorsnombre_heure = ['#49A9EA', '#6A329F', '#EAE749', '#49EA4E', '#EA4956', '#34495E'];
+    let labelsnombre_heure = [
+                    @foreach ($nombre_heures as $nombre_heure)
+                          ' {{ round($nombre_heure->temps,0) }}% - {{ $nombre_heure->LibelleFonction }}',
+                    @endforeach
+                  ];
+    let datanombre_heure = [
+                  @foreach ($nombre_heures as $nombre_heure)
+                          '{{ $nombre_heure->seconde }}',
+                  @endforeach
+                ];
+    let colorsnombre_heure = ['#49A9EA', '#6A329F', '#EAE749', '#49EA4E', '#EA4956', '#34495E'];
 
-let pourcentage = [
-              @foreach ($nombre_heures as $nombre_heure)
-              "{{ $nombre_heure->temps }}",
-              @endforeach
-            ];
+    let pourcentage = [
+                  @foreach ($nombre_heures as $nombre_heure)
+                  "{{ $nombre_heure->temps }}",
+                  @endforeach
+                ];
 
-let myChartnombre_heure = document.getElementById("nombre_heure").getContext('2d');
+    let myChartnombre_heure = document.getElementById("nombre_heure").getContext('2d');
 
-let nombre_heure = new Chart(myChartnombre_heure, {
-    type: 'pie',
-    data: {
-        labels: labelsnombre_heure,
-        datasets: [{
-            data: datanombre_heure,
-            backgroundColor: colorsnombre_heure
-        }]
-    },
-    options: {
-      responsive: true,
-        legend: {
-          align: 'start',
-        position: 'bottom',     
-            labels: {
-                fontSize:15,
-                fontColor: 'black'  
-            }
+    let nombre_heure = new Chart(myChartnombre_heure, {
+        type: 'pie',
+        data: {
+            labels: labelsnombre_heure,
+            datasets: [{
+                data: datanombre_heure,
+                backgroundColor: colorsnombre_heure
+            }]
         },
-        title: {
-            text: "Nombre d'heure par fonction",
-            display: true,
-            fontSize:20,
-            fontColor: 'blue'
+        options: {
+          responsive: true,
+            legend: {
+              align: 'start',
+            position: 'bottom',
+                labels: {
+                    fontSize:15,
+                    fontColor: 'black'
+                }
+            },
+            title: {
+                text: "Nombre d'heure par fonction",
+                display: true,
+                fontSize:20,
+                fontColor: 'blue'
+            }
         }
-    }
-});
+    });
 </script>
 <!-- Fin nombre heure par fonction-->
+
+<!-- Debut fonction -->
+@foreach ($collection_fonctions as $collection_fonction)
+<script type="text/javascript">
+    let labels{{$collection_fonction['fonction_id']}} = [
+                @foreach ($collection_fonction['activite_posits'] as $positionnement)
+                  splitString(('{{ $positionnement->LibelleType }} "{{round($positionnement->position,0) }}"'),3),
+                @endforeach
+              ];
+    let myChart{{$collection_fonction['fonction_id']}} = document.getElementById("fonction{{$collection_fonction['fonction_id']}}").getContext('2d');
+
+    let fonction{{$collection_fonction['fonction_id']}} = new Chart(myChart{{$collection_fonction['fonction_id']}}, {
+        type: 'radar',
+        data: {
+            labels: labels{{$collection_fonction['fonction_id']}},
+            datasets: [
+              {
+                label: '{{$collection_fonction['fonction_libelle']}}',
+                fillColor: "rgba(25, 25, 25, 5)",
+                backgroundColor: "rgba(0, 0, 255, 0.3)", //"rgb(55, 144, 246)"
+                borderColor: "rgba(54, 162, 235, 1)",
+                pointBorderColor: "#191919",
+                pointBackgroundColor: "rgba(25, 25, 25, 5)",
+                data: [
+                    @foreach ($collection_fonction['activite_posits'] as $positionnement)
+                      '{{ $positionnement->position }}',
+                    @endforeach
+                  ]
+              }
+            ]
+        },
+        options: {
+           responsive: true,
+            legend: {
+            //align: 'start',
+            position: 'top',
+                labels: {
+                    fontSize:20,
+                    fontColor: 'blue',
+                }
+            },
+            title: {
+                text: "",
+                display: true,
+                fontSize:24,
+                fontColor: 'blue'
+            },
+            scale: {
+              ticks: {
+                  fontSize: 15,
+                  fontColor: 'black',
+                  max: 4,
+                  min: 0,
+                  stepSize: 1,
+              },
+              angleLines: {
+                color: 'red'
+              },
+              gridLines: {
+                color: 'black'
+              },
+              pointLabels: {
+                fontSize: 17,
+                fontColor: 'black',
+              }
+           },
+        }
+    });
+    </script>
+@endforeach
+<!-- Fin fonction -->
+
 
 </body>
 </html>

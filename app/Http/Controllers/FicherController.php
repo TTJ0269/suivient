@@ -13,14 +13,14 @@ class FicherController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth'); 
+        $this->middleware('auth');
     }
              /**
        * Display a listing of the resource.
        *
        * @return \Illuminate\Http\Response
        */
-     // 
+     //
      public function index()
      {
        try
@@ -41,7 +41,7 @@ class FicherController extends Controller
               ->select('fichers.*','activite_saisies.TitreActiviteSaisie')
               ->orderBy('fichers.id','DESC')
               ->get();
-    
+
               return view('fichers.index', compact('fichers'));
           }
           else
@@ -69,7 +69,7 @@ class FicherController extends Controller
                 ->select('fichers.*','activite_saisies.TitreActiviteSaisie')
                 ->orderBy('fichers.id','DESC')
                 ->get();
-                
+
                 return view('fichers.index', compact('fichers'));
             }
           }
@@ -78,15 +78,15 @@ class FicherController extends Controller
      {
          return redirect('erreur')->with('messageerreur',$exception->getMessage());
      }
-          
+
      }
-  
+
        /**
       * Show the form for creating a new resource.
       *
       * @return \Illuminate\Http\Response
       */
-  
+
      public function create($activite_saisy)
      {
         try
@@ -102,7 +102,7 @@ class FicherController extends Controller
           {
             $activite_saisies = ActiviteSaisie::select('*')->where('id','=',$activite_saisy)->get();
             $ficher = new Ficher();
-      
+
             return view('fichers.create',compact('ficher','activite_saisies'));
           }
         }
@@ -111,26 +111,29 @@ class FicherController extends Controller
            return redirect('erreur')->with('messageerreur',$exception->getMessage());
         }
      }
-  
+
        /**
       * Store a newly created resource in storage.
       *
       * @param  \Illuminate\Http\Request  $request
       * @return \Illuminate\Http\Response
       */
-  
+
      public function store(Request  $request)
      {
        try
-       {   
+       {
         if($request->file('urlficher') == null)
         {
           return back()->with('messagealert', 'Choisissez un fichier.');
         }
+        elseif (request('libelleficher') == null) {
+          return back()->with('messagealert', 'Veuillez donner un nom au fichier.');
+        }
         else
         {
           $fichers = new Ficher;
-        
+
           $fichers->libelleficher=request('libelleficher');
           $fichers->activite_saisie_id=request('activite_saisie_id');
           if($request->file('urlficher'))
@@ -138,11 +141,11 @@ class FicherController extends Controller
               $file=$request->file('urlficher');
               $filename=time().'.'.$file->getClientOriginalExtension();
               $request->urlficher->move('storage/fichier/', $filename);
-      
+
               $fichers->urlficher=$filename;
           }
           $fichers->save();
-  
+
           $huser = (Auth::user()->nomutilisateur). ' ' .(Auth::user()->prenomutilisateur);
           /** historiques des actions sur le systeme **/
             $historique = Historique::create([
@@ -151,7 +154,7 @@ class FicherController extends Controller
             'attribute' => request('libelleficher'),
             'action'=> 'ajout',
           ]);
-      
+
             return redirect('activite_saisies')->with('message', 'Fichier bien ajouté.');
         }
 
@@ -161,14 +164,14 @@ class FicherController extends Controller
           return redirect('erreur')->with('messageerreur',$exception->getMessage());
       }
      }
-  
+
       /**
       * Display the specified resource.
       *
       * @param  int  $id
       * @return \Illuminate\Http\Response
       */
-  
+
      public function show(Ficher $ficher)
      {
         try
@@ -180,14 +183,14 @@ class FicherController extends Controller
            return redirect('erreur')->with('messageerreur',$exception->getMessage());
         }
      }
-  
+
     /**
       * Show the form for editing the specified resource.
       *
       * @param  int  $id
       * @return \Illuminate\Http\Response
       */
-  
+
      public function edit(Ficher $ficher)
      {
         try
@@ -199,7 +202,7 @@ class FicherController extends Controller
            return redirect('erreur')->with('messageerreur',$exception->getMessage());
         }
      }
-  
+
         /**
       * Update the specified resource in storage.
       *
@@ -207,7 +210,7 @@ class FicherController extends Controller
       * @param  int  $id
       * @return \Illuminate\Http\Response
       */
-  
+
      public function update(Ficher $ficher)
      {
       try
@@ -226,7 +229,7 @@ class FicherController extends Controller
             'attribute' => request('libelleficher'),
             'action'=> 'modification',
           ]);
-    
+
           return redirect('fichers/' . $ficher->id);
        }
         catch(\Exception $exception)
@@ -234,14 +237,14 @@ class FicherController extends Controller
            return redirect('erreur')->with('messageerreur',$exception->getMessage());
        }
      }
-  
+
       /**
       * Remove the specified resource from storage.
       *
       * @param  int  $id
       * @return \Illuminate\Http\Response
       */
-  
+
      public function destroy(Ficher $ficher)
      {
        try
@@ -269,8 +272,8 @@ class FicherController extends Controller
               'attribute' => $ficher->libelleficher,
               'action'=> 'suppression',
             ]);
-    
-            return redirect('fichers')->with('messagealert', 'Suppression effectuée avec succès.');    
+
+            return redirect('fichers')->with('messagealert', 'Suppression effectuée avec succès.');
           }
       }
       catch(\Exception $exception)

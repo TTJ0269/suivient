@@ -65,7 +65,7 @@
               <div class="card-header p-2">
                 <ul class="nav nav-pills">
                   <li class="nav-item"><a class="nav-link active" href="#livret" data-toggle="tab">Livret</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#fonction_typeactivite" data-toggle="tab">Fonction & Type d'activité</a></li>
+                  <!--<li class="nav-item"><a class="nav-link" href="#fonction_typeactivite" data-toggle="tab">Fonction & Type d'activité</a></li> -->
                 </ul>
               </div><!-- /.card-header -->
 
@@ -73,105 +73,106 @@
                 <div class="tab-content">
 
                   <div class="active tab-pane" id="livret">
-                     <table id="exa" class="table table-bordered table-striped">
-                      <thead>
-                          <th scope="col">Numero</th>
-                          <th scope="col">Type de l'activité</th>
-                          <th scope="col">Temps</th>
-                      </thead>
+                     @foreach($fonctions as $fonction)
+                        <div class="col-12 col-sm-12"cd>
+                            <div class="card card- collapsed-card">
+                                <div class="card-header">
+                                    <h3 class="card-title"> <strong style="color:rgb(12, 39, 120);"> {{$fonction['fonction_libelle']}} </strong></h3>
 
-                          <tbody>
-                          @foreach($collections as $key=>$collection)
-                          <tr>
-                          <th scope="row"> <a href="#"> {{++$key}} </a> </th>
-                          <th scope="row"> <a href="#"> {{$collection[1]}} </a></th>
-                          <th scope="row"> <a href="#"> </a></th>
-                          <tr>
-                          <th>
-                            <th scope="row">
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="container-fluid">
 
-                              <table id="ea" class="table table-bordered table-striped">
-                              <thead>
-                              <th scope="col">Activité</th>
-                              <th scope="col">Positionnment_activité</th>
-                              </thead>
-                              <tbody>
-                                  @foreach($collection[2] as $activite)
-                                  <tr>
-                                  <th scope="row"> {{$activite->LibelleActivite}} </th>
-                                  <th scope="row">
-                                    <div class="form-group clearfix">
-                                        <div class="icheck-danger d-inline">
-                                        <input type="radio" id="radioDanger{{$activite->id}}" value="0" name="ValeurPost_{{$activite->id}}" checked>
-                                        <label for="radioDanger{{$activite->id}}"></label>
-                                        </div>
-                                        <div class="icheck-orange d-inline">
-                                        <input type="radio" id="radioOrange{{$activite->id}}" value="1" name="ValeurPost_{{$activite->id}}">
-                                        <label for="radioOrange{{$activite->id}}"></label>
-                                        </div>
-                                        <div class="icheck-purple d-inline">
-                                        <input type="radio" id="radioPurple{{$activite->id}}" value="2" name="ValeurPost_{{$activite->id}}">
-                                        <label for="radioPurple{{$activite->id}}"></label>
-                                        </div>
-                                        <div class="icheck-primary d-inline">
-                                        <input type="radio" id="radioPrimary{{$activite->id}}" value="3" name="ValeurPost_{{$activite->id}}">
-                                        <label for="radioPrimary{{$activite->id}}"></label>
-                                        </div>
-                                        <div class="icheck-success d-inline">
-                                        <input type="radio" id="radioSuccess{{$activite->id}}" value="4" name="ValeurPost_{{$activite->id}}">
-                                        <label for="radioSuccess{{$activite->id}}"></label>
+                                    @foreach($fonction['typeactivites'] as $typeactivite)
+                                    <div class="row">
+                                    <div class="col-12 col-sm-10"cd>
+                                        <div class="card card-">
+                                            <div class="card-header">
+                                                <h3 class="card-title"> <strong> {{$typeactivite['typeactivite_libelle']}} </strong></h3>
+
+                                                <div class="card-tools">
+                                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                                    <i class="fas fa-minus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="container-fluid">
+                                                @foreach($typeactivite['activites'] as $activite)
+                                                    <div class="row">
+                                                        <div class="col-12 col-sm-9">
+                                                        <label class="form-check-label"> <i>{{$activite->LibelleActivite}}</i>  </label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-3">
+                                                        <!--input class="form-check-input" type="checkbox" value="{{$activite->id}}" name="activite_id_{{$activite->id}}"-->
+                                                        <div class="form-group clearfix">
+                                                            <div class="icheck-danger d-inline">
+                                                            <input type="radio" id="radioDanger{{$activite->id}}" value="0" name="ValeurPost_{{$activite->id}}" checked>
+                                                            <label for="radioDanger{{$activite->id}}"></label>
+                                                            </div>
+                                                            <div class="icheck-orange d-inline">
+                                                            <input type="radio" id="radioOrange{{$activite->id}}" value="1" name="ValeurPost_{{$activite->id}}">
+                                                            <label for="radioOrange{{$activite->id}}"></label>
+                                                            </div>
+                                                            <div class="icheck-purple d-inline">
+                                                            <input type="radio" id="radioPurple{{$activite->id}}" value="2" name="ValeurPost_{{$activite->id}}">
+                                                            <label for="radioPurple{{$activite->id}}"></label>
+                                                            </div>
+                                                            <div class="icheck-primary d-inline">
+                                                            <input type="radio" id="radioPrimary{{$activite->id}}" value="3" name="ValeurPost_{{$activite->id}}">
+                                                            <label for="radioPrimary{{$activite->id}}"></label>
+                                                            </div>
+                                                            <div class="icheck-success d-inline">
+                                                            <input type="radio" id="radioSuccess{{$activite->id}}" value="4" name="ValeurPost_{{$activite->id}}">
+                                                            <label for="radioSuccess{{$activite->id}}"></label>
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                    <p> <hr> </p>
+                                                @endforeach
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
-                                  </th>
-                                  </tr>
-                                  @endforeach
-                              </tbody>
-                              </table>
-                              </th>
-                              <th scope="row">
-                              <div class="form-group">
-                                  <input type="number" class="form-control @error('TempsPost_{{$collection[0]}}') is-invalid @enderror" name="TempsPost_{{$collection[0]}}"/>
-                                  @error('TempsPost_{{$collection[0]}}')
-                                      <div class="invalid-feedback">
-                                      <!--{{ $errors->first('TempsPost_')}}-->
-                                      </div>
-                                  @enderror
-                              </div>
-                              </th>
-                            </th>
-                            </tr>
-                          </tr>
-                          @endforeach
-                          </tbody>
-                      </table>
+
+                                    <div class="col-12 col-sm-2">
+                                        <label for="">Temps (min)</label>
+                                        <input type="number" class="form-control @error('TempsPost_') is-invalid @enderror" name="TempsPost_{{$typeactivite['typeactivite_id']}}"/>
+                                        @error('TempsPost_')
+                                            <div class="invalid-feedback">
+                                            <!--{{ $errors->first('TempsPost_')}}-->
+                                            </div>
+                                        @enderror
+                                    </div>
+
+                                    </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    @endforeach
                   </div>
 
-                  <div class="tab-pane" id="fonction_typeactivite">
+                  <!--<div class="tab-pane" id="fonction_typeactivite">
 
                       <div class="timeline timeline-inverse">
-                          <!-- timeline time label -->
+                          <timeline time label>
                           <div class="time-label">
                             <span class="bg-primary">
                               Liste des types activités classés par fonction de l'Administrateur ENT
                             </span>
                           </div>
-                              @foreach ($fonction_type_activites as $key=>$fonction_type_activite)
-                            <div>
-                               <i class="fas fa-poll bg-primary"></i>
-                               <div class="timeline-item">
-                                  <!--span class="time"><i class="far fa-clock"></i> 12:05</span-->
 
-                                  <h3 class="timeline-header"> <input hidden {{ $key++}} /> <a href="#">F{{$key++}}: {{$fonction_type_activite[0]}}</a></h3>
-                                    <div class="timeline-body">
-                                                @foreach ($fonction_type_activite[1] as $type_activite)
-                                                  <h6> {{$type_activite->LibelleType}} </h6>
-                                                @endforeach
-                                    </div>
-                                </div>
-                            </div>
-                            @endforeach
                       </div>
-                  </div>
+                  </div> -->
                   <!-- /.tab-pane -->
                 </div>
 
